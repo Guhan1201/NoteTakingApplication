@@ -6,7 +6,7 @@
     app:startDestination="@id/notesListFragment">
     <fragment
         android:id="@+id/notesListFragment"
-        android:name="com.example.roompracticeactivity.NotesListFragment"
+        android:name="com.example.roompracticeactivity.fragment.NotesListFragment"
         android:label="navigation_first_fragment"
         tools:layout="@layout/activity_main">
         <action
@@ -17,7 +17,7 @@
 
     <fragment
         android:id="@+id/addNotesFragment"
-        android:name="com.example.roompracticeactivity.AddNoteFragment"
+        android:name="com.example.roompracticeactivity.fragment.AddNoteFragment"
         android:label="addNotesFragment"
         tools:layout="@layout/activity_add_note" />
 </navigation>

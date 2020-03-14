@@ -1,4 +1,4 @@
-package com.example.roompracticeactivity
+package com.example.roompracticeactivity.fragment
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +10,9 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.roompracticeactivity.NotesListAdapter
+import com.example.roompracticeactivity.NotesListViewModel
+import com.example.roompracticeactivity.R
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
@@ -42,11 +45,13 @@ class NotesListFragment : Fragment() {
 
 
         fab.setOnClickListener {
-            activity?.let { Navigation.findNavController(it, R.id.hostFragment) }
+            activity?.let {
+                Navigation.findNavController(
+                    it,
+                    R.id.hostFragment
+                )
+            }
                 ?.navigate(R.id.action_firstFragment_to_secondFragment)
-//            Intent(context, AddNoteFragment::class.java).apply(fun Intent.() {
-//                startActivity(this)
-//            })
         }
     }
 

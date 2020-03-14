@@ -1,4 +1,4 @@
-package com.example.roompracticeactivity
+package com.example.roompracticeactivity.fragment
 
 import android.os.Bundle
 import android.text.TextUtils
@@ -9,6 +9,9 @@ import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import com.example.roompracticeactivity.Notes
+import com.example.roompracticeactivity.NotesListViewModel
+import com.example.roompracticeactivity.R
 
 class AddNoteFragment : Fragment() {
 
