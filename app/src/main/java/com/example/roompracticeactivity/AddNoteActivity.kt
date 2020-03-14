@@ -34,6 +34,8 @@ class AddNoteActivity : AppCompatActivity() {
                 notesViewModel.insert(Notes(notesTitle.text.toString(),notesDescription.text.toString()))
 
             }
+
+
             finish()
         }
     }
