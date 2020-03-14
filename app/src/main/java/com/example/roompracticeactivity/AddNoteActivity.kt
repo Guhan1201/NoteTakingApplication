@@ -36,6 +36,9 @@ class AddNoteActivity : AppCompatActivity() {
             }
 
 
+
+            
+
             finish()
         }
     }
