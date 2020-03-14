@@ -8,7 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
 class NotesListAdapter internal constructor(
-    context: Context
+    context: Context?
 ) : RecyclerView.Adapter<NotesListAdapter.WordViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
