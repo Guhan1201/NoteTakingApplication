@@ -10,10 +10,10 @@ import androidx.room.Query
 interface NotesDao {
 
     @Query("SELECT * from notes_table ")
-    fun getAllNotes() : LiveData<List<Notes>>
+    fun getAllNotes(): LiveData<List<Notes>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
-    suspend fun insert(notes:  Notes)
+    suspend fun insert(notes: Notes)
 
     @Query("DELETE FROM notes_table")
     suspend fun deleteAll()
