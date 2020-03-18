@@ -5,8 +5,10 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
+import com.example.roompracticeactivity.adapter.NotesListAdapter
+import com.example.roompracticeactivity.viewmodel.NotesListViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 class NotesListActivity : AppCompatActivity() {
@@ -22,7 +24,8 @@ class NotesListActivity : AppCompatActivity() {
         val recyclerView = findViewById<RecyclerView>(R.id.recyclerview)
         val adapter = NotesListAdapter(this)
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
         notesViewModel.allNotes.observe(this, Observer { words ->
             words?.let { adapter.setWords(it) }
