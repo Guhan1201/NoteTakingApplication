@@ -10,7 +10,7 @@ import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.database.entities.Notes
 
 class NotesListAdapter internal constructor(
-    context: Context
+    context: Context?
 ) : RecyclerView.Adapter<NotesListAdapter.WordViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)

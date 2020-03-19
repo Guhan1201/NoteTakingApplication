@@ -1,30 +1,40 @@
-package com.example.roompracticeactivity
+package com.example.roompracticeactivity.fragment
 
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.database.NotesRoomDatabase
 import com.example.roompracticeactivity.database.entities.Notes
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
-class AddNoteActivity : AppCompatActivity() {
+class AddNoteFragment : Fragment() {
 
     private lateinit var notesTitle: EditText
-    private lateinit var notesDescription : EditText
+    private lateinit var notesDescription: EditText
 
 
-    public override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.activity_add_note, container, false)
+    }
 
-        setContentView(R.layout.activity_add_note)
-        notesTitle = findViewById(R.id.edit_word)
-        notesDescription = findViewById(R.id.description)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+
+        notesTitle = view.findViewById(R.id.edit_word)
+        notesDescription = view.findViewById(R.id.description)
 
 
-        val button = findViewById<Button>(R.id.button_save)
+        val button = view.findViewById<Button>(R.id.button_save)
         button.setOnClickListener {
 
             if (TextUtils.isEmpty(notesTitle.text)) {
@@ -32,14 +42,14 @@ class AddNoteActivity : AppCompatActivity() {
             } else {
                 insertNotes()
             }
-            finish()
+            activity?.onBackPressed()
         }
     }
 
     private fun insertNotes() {
         val timeCreated = System.currentTimeMillis()
         GlobalScope.launch {
-            NotesRoomDatabase.getDatabase(this@AddNoteActivity).notesDao().insert(
+            NotesRoomDatabase.getDatabase(context).notesDao().insert(
                 Notes(
                     timeCreated.toString(),
                     notesTitle.text.toString(),
@@ -51,7 +61,5 @@ class AddNoteActivity : AppCompatActivity() {
         }
 
     }
-    companion object {
-        const val EXTRA_REPLY = "com.example.android.wordlistsql.REPLY"
-    }
+
 }

@@ -25,4 +25,5 @@ class NotesListViewModel(application: Application) : AndroidViewModel(applicatio
         repository.insert(notes)
     }
 
+
 }

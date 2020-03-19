@@ -16,14 +16,14 @@ abstract class NotesRoomDatabase : RoomDatabase() {
         @Volatile
         private var INSTANCE: NotesRoomDatabase? = null
 
-        fun getDatabase(context: Context): NotesRoomDatabase {
+        fun getDatabase(context: Context?): NotesRoomDatabase {
             val tempInstance = INSTANCE
             if (tempInstance != null) {
                 return tempInstance
             }
             synchronized(this) {
                 val instance = Room.databaseBuilder(
-                    context.applicationContext,
+                    context!!.applicationContext,
                     NotesRoomDatabase::class.java,
                     dbName
                 ).build()
