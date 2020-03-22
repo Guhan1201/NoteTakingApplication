@@ -1,8 +1,10 @@
-package com.example.roompracticeactivity
+package com.example.roompracticeactivity.database.repository
 
 import androidx.lifecycle.LiveData
+import com.example.roompracticeactivity.database.dao.NotesDao
+import com.example.roompracticeactivity.database.entities.Notes
 
-class notesRepository(private val notesDao: NotesDao) {
+class NotesRepository(private val notesDao: NotesDao) {
 
     // Room executes all queries on a separate thread.
     // Observed LiveData will notify the observer when the data has changed.

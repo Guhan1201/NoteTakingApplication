@@ -8,11 +8,11 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.roompracticeactivity.NotesListAdapter
-import com.example.roompracticeactivity.NotesListViewModel
+import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.roompracticeactivity.R
+import com.example.roompracticeactivity.adapter.NotesListAdapter
+import com.example.roompracticeactivity.viewmodel.NotesListViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 
 
@@ -32,12 +32,15 @@ class NotesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         notesViewModel = ViewModelProvider(this).get(NotesListViewModel::class.java)
 
+        notesViewModel = ViewModelProvider(this).get(NotesListViewModel::class.java)
+
         val recyclerView = view.findViewById<RecyclerView>(R.id.recyclerview)
         val adapter = NotesListAdapter(context)
         recyclerView.adapter = adapter
-        recyclerView.layoutManager = LinearLayoutManager(context)
+        recyclerView.layoutManager =
+            StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
 
-        notesViewModel.allNotes.observe(this.viewLifecycleOwner, Observer { words ->
+        notesViewModel.allNotes.observe(viewLifecycleOwner, Observer { words ->
             words?.let { adapter.setWords(it) }
         })
 
@@ -50,8 +53,7 @@ class NotesListFragment : Fragment() {
                     it,
                     R.id.hostFragment
                 )
-            }
-                ?.navigate(R.id.action_firstFragment_to_secondFragment)
+            }?.navigate(R.id.action_firstFragment_to_secondFragment)
         }
     }
 

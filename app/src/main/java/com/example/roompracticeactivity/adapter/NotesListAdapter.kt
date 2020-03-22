@@ -1,4 +1,4 @@
-package com.example.roompracticeactivity
+package com.example.roompracticeactivity.adapter
 
 import android.content.Context
 import android.view.LayoutInflater
@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.example.roompracticeactivity.R
+import com.example.roompracticeactivity.database.entities.Notes
 
 class NotesListAdapter internal constructor(
     context: Context?
@@ -15,8 +17,8 @@ class NotesListAdapter internal constructor(
     private var notes = emptyList<Notes>() // Cached copy of words
 
     inner class WordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        val notesTitle = itemView.findViewById<TextView>(R.id.title)
-        val notesDescription = itemView.findViewById<TextView>(R.id.description)
+        val notesTitle: TextView = itemView.findViewById(R.id.notes_title) as TextView
+        val notesDescription = itemView.findViewById(R.id.notes_description) as TextView
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
@@ -26,7 +28,7 @@ class NotesListAdapter internal constructor(
 
     override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
         val current = notes[position]
-        holder.notesTitle.text = current.noteName
+        holder.notesTitle.text = current.notesTitle
         holder.notesDescription.text = current.description
     }
 

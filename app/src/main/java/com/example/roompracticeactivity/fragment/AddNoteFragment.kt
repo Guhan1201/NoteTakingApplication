@@ -8,16 +8,16 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
-import com.example.roompracticeactivity.Notes
-import com.example.roompracticeactivity.NotesListViewModel
 import com.example.roompracticeactivity.R
+import com.example.roompracticeactivity.database.NotesRoomDatabase
+import com.example.roompracticeactivity.database.entities.Notes
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 
 class AddNoteFragment : Fragment() {
 
     private lateinit var notesTitle: EditText
     private lateinit var notesDescription: EditText
-    private lateinit var notesViewModel: NotesListViewModel
 
 
     override fun onCreateView(
@@ -34,25 +34,32 @@ class AddNoteFragment : Fragment() {
         notesDescription = view.findViewById(R.id.description)
 
 
-        notesViewModel = ViewModelProvider(this).get(NotesListViewModel::class.java)
-
-
         val button = view.findViewById<Button>(R.id.button_save)
         button.setOnClickListener {
 
             if (TextUtils.isEmpty(notesTitle.text)) {
 
             } else {
-                notesViewModel.insert(
-                    Notes(
-                        notesTitle.text.toString(),
-                        notesDescription.text.toString()
-                    )
-                )
-
+                insertNotes()
             }
             activity?.onBackPressed()
         }
+    }
+
+    private fun insertNotes() {
+        val timeCreated = System.currentTimeMillis()
+        GlobalScope.launch {
+            NotesRoomDatabase.getDatabase(context).notesDao().insert(
+                Notes(
+                    timeCreated.toString(),
+                    notesTitle.text.toString(),
+                    notesDescription.text.toString(),
+                    timeCreated,
+                    timeCreated
+                )
+            )
+        }
+
     }
 
 }
