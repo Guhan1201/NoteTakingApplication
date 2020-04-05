@@ -37,5 +37,9 @@ class NotesListAdapter internal constructor(
         notifyDataSetChanged()
     }
 
+    internal fun callNotifyDataSetChanged() {
+        notifyDataSetChanged()
+    }
+
     override fun getItemCount() = notes.size
 }

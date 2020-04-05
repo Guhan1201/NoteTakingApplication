@@ -15,4 +15,11 @@
         <item name="android:textAppearance">@android:style/TextAppearance.Large</item>
     </style>
 
+    <style name="NoActionBar" parent="Theme.AppCompat.Light.NoActionBar" />
+
+    <style name="MenuPopupTheme">
+        <item name="colorAccent">@color/colorPrimary</item>
+        <item name="colorControlNormal">#ffffff</item>
+    </style>
+
 </resources>

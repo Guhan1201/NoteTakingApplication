@@ -8,4 +8,9 @@
     <string name="add_description">add description</string>
     <string name="title">title</string>
     <string name="description">description</string>
+    <string name="add_note">Add Note</string>
+    <string name="notes_list">notes list</string>
+    <string name="order">order</string>
+    <string name="newest_on_top">newest on top</string>
+    <string name="oldest_on_top">oldest on top</string>
 </resources>

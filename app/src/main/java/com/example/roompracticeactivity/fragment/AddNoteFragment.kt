@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.database.NotesRoomDatabase
 import com.example.roompracticeactivity.database.entities.Notes
+import com.example.roompracticeactivity.database.repository.NotesRepository
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
@@ -18,7 +19,7 @@ class AddNoteFragment : Fragment() {
 
     private lateinit var notesTitle: EditText
     private lateinit var notesDescription: EditText
-
+    private lateinit var repository: NotesRepository
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -32,6 +33,9 @@ class AddNoteFragment : Fragment() {
 
         notesTitle = view.findViewById(R.id.edit_word)
         notesDescription = view.findViewById(R.id.description)
+
+        val wordsDao = NotesRoomDatabase.getDatabase(requireContext()).notesDao()
+        repository = NotesRepository(wordsDao)
 
 
         val button = view.findViewById<Button>(R.id.button_save)
@@ -49,7 +53,7 @@ class AddNoteFragment : Fragment() {
     private fun insertNotes() {
         val timeCreated = System.currentTimeMillis()
         GlobalScope.launch {
-            NotesRoomDatabase.getDatabase(context).notesDao().insert(
+            repository.insert(
                 Notes(
                     timeCreated.toString(),
                     notesTitle.text.toString(),

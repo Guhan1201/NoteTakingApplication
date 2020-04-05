@@ -13,4 +13,6 @@ class NotesRepository(private val notesDao: NotesDao) {
     suspend fun insert(word: Notes) {
         notesDao.insert(word)
     }
+
+
 }

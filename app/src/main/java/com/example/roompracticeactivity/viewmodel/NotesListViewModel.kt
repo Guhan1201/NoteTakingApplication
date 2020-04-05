@@ -3,17 +3,18 @@ package com.example.roompracticeactivity.viewmodel
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.MutableLiveData
 import com.example.roompracticeactivity.database.NotesRoomDatabase
 import com.example.roompracticeactivity.database.entities.Notes
 import com.example.roompracticeactivity.database.repository.NotesRepository
-import kotlinx.coroutines.launch
 
 class NotesListViewModel(application: Application) : AndroidViewModel(application) {
 
     private val repository: NotesRepository
 
-    val allNotes: LiveData<List<Notes>>
+    var allNotes: LiveData<List<Notes>>
+
+    var reversedLiveData = MutableLiveData<List<Notes>>()
 
     init {
         val wordsDao = NotesRoomDatabase.getDatabase(application).notesDao()
@@ -21,9 +22,12 @@ class NotesListViewModel(application: Application) : AndroidViewModel(applicatio
         allNotes = repository.allNotes
     }
 
-    fun insert(notes: Notes) = viewModelScope.launch {
-        repository.insert(notes)
+    fun setOrderAsNewestOnTop() {
+        reversedLiveData.postValue(repository.allNotes.value?.reversed())
     }
 
+    fun setOrderAsOldestOnTop() {
+        reversedLiveData.postValue(allNotes.value)
+    }
 
 }

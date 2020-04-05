@@ -8,7 +8,7 @@
         android:id="@+id/notesListFragment"
         android:name="com.example.roompracticeactivity.fragment.NotesListFragment"
         android:label="navigation_first_fragment"
-        tools:layout="@layout/activity_main">
+        tools:layout="@layout/notes_list_fragment">
         <action
             android:id="@+id/action_firstFragment_to_secondFragment"
             app:destination="@id/addNotesFragment"
