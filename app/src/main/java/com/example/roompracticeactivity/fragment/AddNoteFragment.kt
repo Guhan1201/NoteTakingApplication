@@ -5,8 +5,8 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Button
 import android.widget.EditText
+import android.widget.LinearLayout
 import androidx.fragment.app.Fragment
 import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.database.NotesRoomDatabase
@@ -26,7 +26,7 @@ class AddNoteFragment : Fragment() {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        return inflater.inflate(R.layout.activity_add_note, container, false)
+        return inflater.inflate(R.layout.fragment_add_note, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -38,7 +38,7 @@ class AddNoteFragment : Fragment() {
         repository = NotesRepository(wordsDao)
 
 
-        val button = view.findViewById<Button>(R.id.button_save)
+        val button = view.findViewById<LinearLayout>(R.id.save)
         button.setOnClickListener {
 
             if (TextUtils.isEmpty(notesTitle.text)) {

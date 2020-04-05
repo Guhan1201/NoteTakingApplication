@@ -19,5 +19,5 @@
         android:id="@+id/addNotesFragment"
         android:name="com.example.roompracticeactivity.fragment.AddNoteFragment"
         android:label="addNotesFragment"
-        tools:layout="@layout/activity_add_note" />
+        tools:layout="@layout/fragment_add_note" />
 </navigation>
