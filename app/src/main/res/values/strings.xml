@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">RoomPracticeActivity</string>
 
-    <string name="hint_word">Word...</string>
+    <string name="hint_word">Word…</string>
     <string name="button_save">Save</string>
     <string name="empty_not_saved">Word not saved because it is empty.</string>
     <string name="addtitile">add title</string>
@@ -13,4 +13,5 @@
     <string name="order">order</string>
     <string name="newest_on_top">newest on top</string>
     <string name="oldest_on_top">oldest on top</string>
+    <string name="title_should_not_be_empty">Notes Title should not be empty</string>
 </resources>
