@@ -14,7 +14,7 @@ class NotesListAdapter internal constructor(
 ) : RecyclerView.Adapter<NotesListAdapter.WordViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
-    private var notes = emptyList<Notes>() // Cached copy of words
+    private var notes = ArrayList<Notes>()
 
     inner class WordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val notesTitle: TextView = itemView.findViewById(R.id.notes_title) as TextView
@@ -33,7 +33,8 @@ class NotesListAdapter internal constructor(
     }
 
     internal fun setWords(words: List<Notes>) {
-        this.notes = words
+        notes.clear()
+        notes.addAll(words)
         notifyDataSetChanged()
     }
 

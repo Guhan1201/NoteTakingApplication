@@ -3,13 +3,12 @@ package com.example.roompracticeactivity.customview
 import android.R
 import android.content.Context
 import android.util.AttributeSet
-import android.widget.EditText
 
 
 class CustomEditTextWithBullets(
     context: Context?,
     attrs: AttributeSet?
-) : EditText(context, attrs, R.attr.editTextStyle) {
+) : androidx.appcompat.widget.AppCompatEditText(context, attrs, R.attr.editTextStyle) {
 
     var number = 1
 
@@ -25,7 +24,7 @@ class CustomEditTextWithBullets(
             if (text.toString().length == 1) {
                 text = "$number $text"
                 setText(text)
-                setSelection(getText().length)
+                getText()?.length?.let { setSelection(it) }
             }
             if (text.toString().endsWith("\n")) {
                 number = findFrequency(text.toString())
@@ -34,7 +33,7 @@ class CustomEditTextWithBullets(
                 text = s
                 setText(text)
                 number += 1
-                setSelection(getText().length)
+                getText()?.length?.let { setSelection(it) }
             }
         }
         super.onTextChanged(text, start, lengthBefore, lengthAfter)

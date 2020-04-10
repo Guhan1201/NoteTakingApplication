@@ -14,7 +14,14 @@ class NotesListViewModel(application: Application) : AndroidViewModel(applicatio
 
     var allNotes: LiveData<List<Notes>>
 
-    var reversedLiveData = MutableLiveData<List<Notes>>()
+    private var _reversedLiveData = MutableLiveData<List<Notes>>()
+    val reversedLiveData: LiveData<List<Notes>>
+        get() = _reversedLiveData
+
+    private var _staggeredGridLayoutEnable = MutableLiveData<Boolean>(false)
+    val staggeredGridLayoutEnable: LiveData<Boolean>
+        get() = _staggeredGridLayoutEnable
+
 
     init {
         val wordsDao = NotesRoomDatabase.getDatabase(application).notesDao()
@@ -23,11 +30,15 @@ class NotesListViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun setOrderAsNewestOnTop() {
-        reversedLiveData.postValue(repository.allNotes.value?.reversed())
+        _reversedLiveData.postValue(repository.allNotes.value?.reversed())
     }
 
     fun setOrderAsOldestOnTop() {
-        reversedLiveData.postValue(allNotes.value)
+        _reversedLiveData.postValue(allNotes.value)
+    }
+
+    fun setStaggeredGridLayoutEnable(value: Boolean) {
+        _staggeredGridLayoutEnable.postValue(value)
     }
 
 }

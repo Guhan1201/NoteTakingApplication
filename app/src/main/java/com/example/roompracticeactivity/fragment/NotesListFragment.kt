@@ -2,7 +2,6 @@ package com.example.roompracticeactivity.fragment
 
 import android.os.Build
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.MenuItem
 import android.view.View
@@ -61,13 +60,26 @@ class NotesListFragment : Fragment() {
         recyclerView.adapter = adapter
         toggleSwitcher = false
 
-        notesViewModel.allNotes.observe(viewLifecycleOwner, Observer { words ->
-            words?.let { adapter.setWords(it) }
-        })
 
-        notesViewModel.reversedLiveData.observe(viewLifecycleOwner, Observer {
-            adapter.setWords(it)
-        })
+        with(notesViewModel) {
+            allNotes.observe(viewLifecycleOwner, Observer { words ->
+                words?.let { adapter.setWords(it) }
+            })
+            reversedLiveData.observe(viewLifecycleOwner, Observer {
+                adapter.setWords(it)
+            })
+            staggeredGridLayoutEnable.observe(viewLifecycleOwner, Observer {
+                if (it) {
+                    recyclerView.layoutManager =
+                        StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+                    recyclerView.adapter = adapter
+                } else {
+                    recyclerView.layoutManager =
+                        LinearLayoutManager(requireContext())
+                }
+
+            })
+        }
 
         fab = view.findViewById(R.id.fab)
         back = view.findViewById(R.id.back)
@@ -79,7 +91,6 @@ class NotesListFragment : Fragment() {
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        Log.e("test ", "test")
         when (item.itemId) {
             R.id.newest_on_top -> {
                 notesViewModel.setOrderAsNewestOnTop()
@@ -112,20 +123,13 @@ class NotesListFragment : Fragment() {
         }
 
         changeView.setOnClickListener {
-            if (!toggleSwitcher) {
+            if (notesViewModel.staggeredGridLayoutEnable.value!!) {
                 changeFormatImageView.setImageResource(R.drawable.ic_resize)
-                recyclerView.layoutManager =
-                    LinearLayoutManager(requireContext())
-                toggleSwitcher = true
-
+                notesViewModel.setStaggeredGridLayoutEnable(false)
             } else {
                 changeFormatImageView.setImageResource(R.drawable.ic_up_arrow)
-                recyclerView.layoutManager =
-                    StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
-                toggleSwitcher = false
+                notesViewModel.setStaggeredGridLayoutEnable(true)
             }
-            recyclerView.adapter = adapter
-            adapter.callNotifyDataSetChanged()
         }
     }
 
