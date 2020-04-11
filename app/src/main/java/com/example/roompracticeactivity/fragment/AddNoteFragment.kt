@@ -53,12 +53,11 @@ class AddNoteFragment : Fragment() {
                 snack.show()
             } else {
                 insertNotes()
-                activity?.onBackPressed()
-
+                backPressed()
             }
         }
         back.setOnClickListener {
-            activity?.onBackPressed()
+            backPressed()
         }
         super.onStart()
     }
@@ -102,4 +101,7 @@ class AddNoteFragment : Fragment() {
 
     }
 
+    private fun backPressed() {
+        activity?.onBackPressed()
+    }
 }

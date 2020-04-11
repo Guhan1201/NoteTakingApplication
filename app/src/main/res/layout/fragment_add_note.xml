@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#ffffff"
@@ -34,12 +34,12 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
+                    android:focusable="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintLeft_toLeftOf="parent"
-                    android:layout_marginLeft="8dp"
-                    android:focusable="true"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
@@ -55,12 +55,12 @@
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_marginEnd="8dp"
+                    android:layout_marginRight="8dp"
                     android:background="?attr/selectableItemBackgroundBorderless"
                     android:clickable="true"
+                    android:focusable="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintRight_toRightOf="parent"
-                    android:layout_marginRight="8dp"
-                    android:focusable="true"
                     app:layout_constraintTop_toTopOf="parent">
 
                     <ImageView
@@ -83,21 +83,24 @@
             android:layout_marginBottom="16dp"
             android:orientation="horizontal">
 
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_notes_title" />
-
             <EditText
                 android:id="@+id/edit_word"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="12dp"
+                android:layout_weight="10"
                 android:fontFamily="sans-serif-light"
                 android:hint="@string/title"
                 android:inputType="textAutoComplete"
                 android:padding="6dp"
                 android:textSize="18sp" />
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="12dp"
+                android:src="@drawable/ic_notes_title" />
 
         </LinearLayout>
 
@@ -107,6 +110,7 @@
             android:layout_marginTop="16dp"
             android:layout_marginBottom="16dp"
             android:orientation="vertical">
+
 
             <EditText
                 android:id="@+id/description"
