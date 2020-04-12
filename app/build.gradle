@@ -11,7 +11,7 @@ android {
     buildToolsVersion "29.0.2"
     defaultConfig {
         applicationId "com.example.roompracticeactivity"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 29
         versionCode 1
         versionName "1.0"
@@ -59,8 +59,7 @@ dependencies {
 // Coroutines
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:$rootProject.coroutines"
 
-// UI
-    implementation "com.google.android.material:material:$rootProject.materialVersion"
+
 
 // Testing
     androidTestImplementation "androidx.arch.core:core-testing:$rootProject.coreTestingVersion"
@@ -68,5 +67,8 @@ dependencies {
 // navgraph
     implementation "android.arch.navigation:navigation-fragment-ktx:1.0.0-alpha05"
     implementation "android.arch.navigation:navigation-ui-ktx:1.0.0-alpha05"
+
+    implementation "dev.sasikanth:colorsheet:1.0.1"
+    implementation 'com.google.android.material:material:1.1.0'
 
 }
