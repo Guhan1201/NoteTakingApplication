@@ -123,7 +123,8 @@ class AddNoteFragment : Fragment() {
                     notesTitle.text.toString(),
                     notesDescription.text.toString(),
                     timeCreated,
-                    timeCreated
+                    timeCreated,
+                    selectedColor
                 )
             )
         }
@@ -131,7 +132,7 @@ class AddNoteFragment : Fragment() {
     }
 
     private fun backPressed() {
-        activity?.onBackPressed()
+        requireActivity().onBackPressed()
     }
 
     @SuppressLint("ResourceAsColor")

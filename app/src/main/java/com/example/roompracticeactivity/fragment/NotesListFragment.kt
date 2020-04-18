@@ -2,10 +2,7 @@ package com.example.roompracticeactivity.fragment
 
 import android.os.Build
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -17,6 +14,7 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.adapter.NotesListAdapter
+import com.example.roompracticeactivity.enumClass.Order
 import com.example.roompracticeactivity.viewmodel.NotesListViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.notes_list_fragment.*
@@ -33,6 +31,7 @@ class NotesListFragment : Fragment() {
     private lateinit var toolbar: androidx.appcompat.widget.Toolbar
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NotesListAdapter
+    private var selectedOrder = Order.NONE
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -87,6 +86,7 @@ class NotesListFragment : Fragment() {
         toolbar = view.findViewById(R.id.toolbar)
         toolbar.inflateMenu(R.menu.order_menu)
 
+
         toolbar.setOnMenuItemClickListener { item -> onOptionsItemSelected(item) }
     }
 
@@ -94,12 +94,28 @@ class NotesListFragment : Fragment() {
         when (item.itemId) {
             R.id.newest_on_top -> {
                 notesViewModel.setOrderAsNewestOnTop()
+                item.isChecked = true
+                selectedOrder = Order.NEWEST_ON_TOP
             }
             R.id.oldest_on_top -> {
                 notesViewModel.setOrderAsOldestOnTop()
+                item.isChecked = true
+                selectedOrder = Order.OLDEST_ON_TOP
             }
         }
         return true
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.order_menu, menu)
+        when(selectedOrder) {
+            Order.OLDEST_ON_TOP -> menu.findItem(R.id.oldest_on_top).isChecked = true
+            Order.NEWEST_ON_TOP -> menu.findItem(R.id.newest_on_top).isChecked = true
+            Order.NONE -> {
+
+            }
+        }
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     override fun onStop() {

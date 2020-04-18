@@ -22,6 +22,9 @@ data class Notes(
     val createdTime: Long,
 
     @ColumnInfo(name = "last_modified_time")
-    val last_modified_time: Long
+    val last_modified_time: Long,
+
+    @ColumnInfo(name = "back_ground_color")
+    val backgroundColor: Int
 
 )

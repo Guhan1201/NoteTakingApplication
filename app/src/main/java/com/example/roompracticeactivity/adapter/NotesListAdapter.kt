@@ -5,6 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.database.entities.Notes
@@ -19,6 +20,7 @@ class NotesListAdapter internal constructor(
     inner class WordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val notesTitle: TextView = itemView.findViewById(R.id.notes_title) as TextView
         val notesDescription = itemView.findViewById(R.id.notes_description) as TextView
+        val parent = itemView.findViewById(R.id.parent) as ConstraintLayout
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
@@ -30,6 +32,7 @@ class NotesListAdapter internal constructor(
         val current = notes[position]
         holder.notesTitle.text = current.notesTitle
         holder.notesDescription.text = current.description
+        holder.parent.setBackgroundColor(current.backgroundColor)
     }
 
     internal fun setWords(words: List<Notes>) {
