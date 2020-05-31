@@ -6,6 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.recyclerview.widget.DiffUtil
+import androidx.recyclerview.widget.DiffUtil.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.database.entities.Notes
@@ -36,14 +38,31 @@ class NotesListAdapter internal constructor(
     }
 
     internal fun setWords(words: List<Notes>) {
+        val diffCallback = NotesListDiffCallback(notes, words)
+        val diffResult = calculateDiff(diffCallback)
         notes.clear()
         notes.addAll(words)
-        notifyDataSetChanged()
-    }
-
-    internal fun callNotifyDataSetChanged() {
-        notifyDataSetChanged()
+        diffResult.dispatchUpdatesTo(this)
     }
 
     override fun getItemCount() = notes.size
+}
+
+class NotesListDiffCallback(private val oldList: List<Notes>, private val newList: List<Notes>) :
+    Callback() {
+
+    override fun areItemsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        return oldList[oldItemPosition].notesUid === newList[newItemPosition].notesUid
+    }
+
+    override fun getOldListSize() = oldList.size
+
+    override fun getNewListSize(): Int = newList.size
+
+    override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
+        val (value) = oldList[oldItemPosition]
+        val (value1) = newList[newItemPosition]
+        return value == value1
+    }
+
 }

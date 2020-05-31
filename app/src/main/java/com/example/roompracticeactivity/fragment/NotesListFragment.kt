@@ -3,17 +3,20 @@ package com.example.roompracticeactivity.fragment
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
+import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.adapter.NotesListAdapter
+import com.example.roompracticeactivity.database.entities.Notes
 import com.example.roompracticeactivity.enumClass.Order
 import com.example.roompracticeactivity.viewmodel.NotesListViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -32,6 +35,7 @@ class NotesListFragment : Fragment() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NotesListAdapter
     private var selectedOrder = Order.NONE
+    private lateinit var notesList: List<Notes>
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,11 +61,33 @@ class NotesListFragment : Fragment() {
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
+
+
+        val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
+            override fun onMove(
+                recyclerView: RecyclerView,
+                viewHolder: RecyclerView.ViewHolder,
+                target: RecyclerView.ViewHolder
+            ): Boolean {
+                return false
+            }
+
+            override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+                val postion = viewHolder.adapterPosition
+                notesViewModel.deleteNotes(notesList[postion])
+            }
+        }
+
+        val setItemTouchHelper = ItemTouchHelper(itemTouchHelper)
+        setItemTouchHelper.attachToRecyclerView(recyclerView)
+
+
         toggleSwitcher = false
 
 
         with(notesViewModel) {
             allNotes.observe(viewLifecycleOwner, Observer { words ->
+                notesList = words
                 words?.let { adapter.setWords(it) }
             })
             reversedLiveData.observe(viewLifecycleOwner, Observer {
@@ -85,9 +111,9 @@ class NotesListFragment : Fragment() {
         changeView = view.findViewById(R.id.changeFormatView)
         toolbar = view.findViewById(R.id.toolbar)
         toolbar.inflateMenu(R.menu.order_menu)
-
-
         toolbar.setOnMenuItemClickListener { item -> onOptionsItemSelected(item) }
+
+
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
@@ -108,7 +134,7 @@ class NotesListFragment : Fragment() {
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.order_menu, menu)
-        when(selectedOrder) {
+        when (selectedOrder) {
             Order.OLDEST_ON_TOP -> menu.findItem(R.id.oldest_on_top).isChecked = true
             Order.NEWEST_ON_TOP -> menu.findItem(R.id.newest_on_top).isChecked = true
             Order.NONE -> {
@@ -147,6 +173,7 @@ class NotesListFragment : Fragment() {
                 notesViewModel.setStaggeredGridLayoutEnable(true)
             }
         }
+
     }
 
     private fun setOnclickListenerWithNull() {

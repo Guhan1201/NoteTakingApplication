@@ -55,6 +55,7 @@
                 app:layout_constraintTop_toTopOf="@+id/back"
                 tools:text="@string/notes_list" />
 
+
             <LinearLayout
                 android:id="@+id/changeFormatView"
                 android:layout_width="48dp"

@@ -38,7 +38,6 @@ class AddNoteFragment : Fragment() {
     private lateinit var parentLinearLayout : LinearLayout
 
     private var selectedColor: Int = ColorSheet.NO_COLOR
-    private var noColorOption = false
 
 
 

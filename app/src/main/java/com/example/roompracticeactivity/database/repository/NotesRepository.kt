@@ -14,5 +14,9 @@ class NotesRepository(private val notesDao: NotesDao) {
         notesDao.insert(word)
     }
 
+    suspend fun delete(id : String) {
+        notesDao.delete(id)
+    }
+
 
 }
