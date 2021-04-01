@@ -45,7 +45,7 @@ class NotesListViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun deleteNotes(notes: Notes) {
-        GlobalScope.launch {
+        viewModelScope.launch {
             notes.notesUid.let {
                 repository.delete(it)
             }

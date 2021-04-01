@@ -79,7 +79,6 @@ class AddNoteFragment : Fragment() {
                     listener = { color ->
                         selectedColor = color
                         setColor(color)
-                        print("Guhan Test$color")
                     })
                 .show(requireActivity().supportFragmentManager)
         }
