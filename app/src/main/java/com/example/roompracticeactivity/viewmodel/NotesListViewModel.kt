@@ -53,4 +53,8 @@ class NotesListViewModel(application: Application) : AndroidViewModel(applicatio
             repository.insert(notes)
         }
     }
+
+    fun removeNoteFromUI(position: Int, notes: Notes) {
+
+    }
 }

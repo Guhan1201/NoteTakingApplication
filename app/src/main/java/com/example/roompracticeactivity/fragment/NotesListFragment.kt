@@ -3,7 +3,6 @@ package com.example.roompracticeactivity.fragment
 import android.os.Build
 import android.os.Bundle
 import android.view.*
-import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -20,6 +19,9 @@ import com.example.roompracticeactivity.database.entities.Notes
 import com.example.roompracticeactivity.enumClass.Order
 import com.example.roompracticeactivity.viewmodel.NotesListViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.snackbar.BaseTransientBottomBar
+import com.google.android.material.snackbar.Snackbar
+import kotlinx.android.synthetic.main.note_display.*
 import kotlinx.android.synthetic.main.notes_list_fragment.*
 import kotlin.properties.Delegates
 
@@ -75,6 +77,21 @@ class NotesListFragment : Fragment() {
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val postion = viewHolder.adapterPosition
                 notesViewModel.deleteNotes(notesList[postion])
+                Snackbar.make(parent, "Message is deleted", Snackbar.LENGTH_LONG)
+                    .setAction("UNDO", {
+
+                    })
+                    .addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
+                        override fun onShown(transientBottomBar: Snackbar?) {
+                            super.onShown(transientBottomBar)
+                        }
+
+                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
+                            super.onDismissed(transientBottomBar, event)
+                        }
+
+                    })
+                    .show()
             }
         }
 
@@ -88,10 +105,10 @@ class NotesListFragment : Fragment() {
         with(notesViewModel) {
             allNotes.observe(viewLifecycleOwner, Observer { words ->
                 notesList = words
-                words?.let { adapter.setWords(it) }
+                words?.let { adapter.setNotes(it) }
             })
             reversedLiveData.observe(viewLifecycleOwner, Observer {
-                adapter.setWords(it)
+                adapter.setNotes(it)
             })
             staggeredGridLayoutEnable.observe(viewLifecycleOwner, Observer {
                 if (it) {
