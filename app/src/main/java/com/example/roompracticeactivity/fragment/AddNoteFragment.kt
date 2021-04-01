@@ -14,19 +14,19 @@ import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
 import androidx.coordinatorlayout.widget.CoordinatorLayout
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.config
-import com.example.roompracticeactivity.database.NotesRoomDatabase
 import com.example.roompracticeactivity.database.entities.Notes
 import com.example.roompracticeactivity.database.repository.NotesRepository
+import com.example.roompracticeactivity.viewmodel.NotesListViewModel
 import com.google.android.material.snackbar.Snackbar
 import dev.sasikanth.colorsheet.ColorSheet
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
 
 
 class AddNoteFragment : Fragment() {
 
+    private lateinit var notesViewModel: NotesListViewModel
     private lateinit var notesTitle: EditText
     private lateinit var notesDescription: EditText
     private lateinit var repository: NotesRepository
@@ -35,10 +35,9 @@ class AddNoteFragment : Fragment() {
     private lateinit var parent: CoordinatorLayout
     private lateinit var colorPallete: ImageView
     private lateinit var colors: IntArray
-    private lateinit var parentLinearLayout : LinearLayout
+    private lateinit var parentLinearLayout: LinearLayout
 
     private var selectedColor: Int = ColorSheet.NO_COLOR
-
 
 
     override fun onCreateView(
@@ -96,16 +95,12 @@ class AddNoteFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-
+        notesViewModel = ViewModelProvider(this).get(NotesListViewModel::class.java)
         notesTitle = view.findViewById(R.id.edit_word)
         notesDescription = view.findViewById(R.id.description)
         parent = view.findViewById(R.id.parent)
         colors = resources.getIntArray(R.array.colors)
         parentLinearLayout = view.findViewById(R.id.parentLinearLayout)
-
-
-        val wordsDao = NotesRoomDatabase.getDatabase(requireContext()).notesDao()
-        repository = NotesRepository(wordsDao)
         button = view.findViewById(R.id.save)
         back = view.findViewById(R.id.back)
         colorPallete = view.findViewById(R.id.colorPallete)
@@ -114,19 +109,17 @@ class AddNoteFragment : Fragment() {
 
     private fun insertNotes() {
         val timeCreated = System.currentTimeMillis()
-        GlobalScope.launch {
-            repository.insert(
-                Notes(
-                    timeCreated.toString(),
-                    notesTitle.text.toString(),
-                    notesDescription.text.toString(),
-                    timeCreated,
-                    timeCreated,
-                    selectedColor
-                )
-            )
-        }
 
+        notesViewModel.insertNotes(
+            Notes(
+                timeCreated.toString(),
+                notesTitle.text.toString(),
+                notesDescription.text.toString(),
+                timeCreated,
+                timeCreated,
+                selectedColor
+            )
+        )
     }
 
     private fun backPressed() {
@@ -134,8 +127,8 @@ class AddNoteFragment : Fragment() {
     }
 
     @SuppressLint("ResourceAsColor")
-    private fun setColor(@ColorRes color : Int) {
-       parentLinearLayout.setBackgroundColor(color)
+    private fun setColor(@ColorRes color: Int) {
+        parentLinearLayout.setBackgroundColor(color)
     }
 
 }
