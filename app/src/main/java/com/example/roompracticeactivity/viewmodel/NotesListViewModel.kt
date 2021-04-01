@@ -15,6 +15,8 @@ class NotesListViewModel(application: Application) : AndroidViewModel(applicatio
 
     var allNotes: LiveData<List<Notes>>
 
+    var referenceAllNotes = MutableLiveData<List<Notes>>()
+
     private var _reversedLiveData = MutableLiveData<List<Notes>>()
     val reversedLiveData: LiveData<List<Notes>>
         get() = _reversedLiveData
@@ -26,6 +28,7 @@ class NotesListViewModel(application: Application) : AndroidViewModel(applicatio
 
     init {
         allNotes = repository.allNotes
+        referenceAllNotes.value = repository.allNotes.value
     }
 
     fun setOrderAsNewestOnTop() {
@@ -54,7 +57,4 @@ class NotesListViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
-    fun removeNoteFromUI(position: Int, notes: Notes) {
-
-    }
 }

@@ -76,21 +76,12 @@ class NotesListFragment : Fragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
                 val postion = viewHolder.adapterPosition
-                notesViewModel.deleteNotes(notesList[postion])
-                Snackbar.make(parent, "Message is deleted", Snackbar.LENGTH_LONG)
-                    .setAction("UNDO", {
-
-                    })
-                    .addCallback(object : BaseTransientBottomBar.BaseCallback<Snackbar>() {
-                        override fun onShown(transientBottomBar: Snackbar?) {
-                            super.onShown(transientBottomBar)
-                        }
-
-                        override fun onDismissed(transientBottomBar: Snackbar?, event: Int) {
-                            super.onDismissed(transientBottomBar, event)
-                        }
-
-                    })
+                val deletedNotes = notesList[postion]
+                notesViewModel.deleteNotes(deletedNotes)
+                Snackbar.make(parent, getString(R.string.notes_deleted), Snackbar.LENGTH_LONG)
+                    .setAction(getString(R.string.undo)) {
+                        notesViewModel.insertNotes(deletedNotes)
+                    }
                     .show()
             }
         }
