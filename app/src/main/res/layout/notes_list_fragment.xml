@@ -38,7 +38,8 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_margin="12dp"
-                    android:src="@drawable/ic_arrow_back_black_24dp" />
+                    android:src="@drawable/ic_arrow_back_black_24dp"
+                    android:tint="#ffffff" />
             </LinearLayout>
 
             <TextView

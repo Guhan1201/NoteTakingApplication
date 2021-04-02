@@ -9,7 +9,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
 import android.widget.ImageView
-import android.widget.LinearLayout
 import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -19,6 +18,8 @@ import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.config
 import com.example.roompracticeactivity.database.entities.Notes
 import com.example.roompracticeactivity.viewmodel.NotesListViewModel
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import dev.sasikanth.colorsheet.ColorSheet
 
@@ -28,11 +29,11 @@ class AddNoteFragment : Fragment() {
     private lateinit var notesViewModel: NotesListViewModel
     private lateinit var notesTitle: EditText
     private lateinit var notesDescription: EditText
-    private lateinit var button: LinearLayout
-    private lateinit var back: LinearLayout
     private lateinit var parent: ConstraintLayout
     private lateinit var colorPallete: ImageView
     private lateinit var colors: IntArray
+    private lateinit var save: FloatingActionButton
+    private lateinit var toolbar: MaterialToolbar
 
     private var selectedColor: Int = ColorSheet.NO_COLOR
 
@@ -47,7 +48,7 @@ class AddNoteFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onStart() {
-        button.setOnClickListener {
+        save.setOnClickListener {
             if (TextUtils.isEmpty(notesTitle.text)) {
                 val snack = Snackbar.make(
                     parent,
@@ -60,9 +61,6 @@ class AddNoteFragment : Fragment() {
                 insertNotes()
                 backPressed()
             }
-        }
-        back.setOnClickListener {
-            backPressed()
         }
 
 
@@ -83,12 +81,6 @@ class AddNoteFragment : Fragment() {
         super.onStart()
     }
 
-    override fun onStop() {
-        button.setOnClickListener(null)
-        back.setOnClickListener(null)
-        super.onStop()
-    }
-
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
@@ -97,9 +89,9 @@ class AddNoteFragment : Fragment() {
         notesDescription = view.findViewById(R.id.description)
         parent = view.findViewById(R.id.parent)
         colors = resources.getIntArray(R.array.colors)
-        button = view.findViewById(R.id.save)
-        back = view.findViewById(R.id.back)
+        save = view.findViewById(R.id.save)
         colorPallete = view.findViewById(R.id.colorPallete)
+        toolbar = view.findViewById(R.id.topAppBar)
 
     }
 
@@ -125,6 +117,7 @@ class AddNoteFragment : Fragment() {
     @SuppressLint("ResourceAsColor")
     private fun setColor(@ColorRes color: Int) {
         parent.setBackgroundColor(color)
+        toolbar.setBackgroundColor(color)
     }
 
 }
