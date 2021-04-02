@@ -12,13 +12,12 @@ import android.widget.ImageView
 import android.widget.LinearLayout
 import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
-import androidx.coordinatorlayout.widget.CoordinatorLayout
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.config
 import com.example.roompracticeactivity.database.entities.Notes
-import com.example.roompracticeactivity.database.repository.NotesRepository
 import com.example.roompracticeactivity.viewmodel.NotesListViewModel
 import com.google.android.material.snackbar.Snackbar
 import dev.sasikanth.colorsheet.ColorSheet
@@ -29,13 +28,11 @@ class AddNoteFragment : Fragment() {
     private lateinit var notesViewModel: NotesListViewModel
     private lateinit var notesTitle: EditText
     private lateinit var notesDescription: EditText
-    private lateinit var repository: NotesRepository
     private lateinit var button: LinearLayout
     private lateinit var back: LinearLayout
-    private lateinit var parent: CoordinatorLayout
+    private lateinit var parent: ConstraintLayout
     private lateinit var colorPallete: ImageView
     private lateinit var colors: IntArray
-    private lateinit var parentLinearLayout: LinearLayout
 
     private var selectedColor: Int = ColorSheet.NO_COLOR
 
@@ -100,7 +97,6 @@ class AddNoteFragment : Fragment() {
         notesDescription = view.findViewById(R.id.description)
         parent = view.findViewById(R.id.parent)
         colors = resources.getIntArray(R.array.colors)
-        parentLinearLayout = view.findViewById(R.id.parentLinearLayout)
         button = view.findViewById(R.id.save)
         back = view.findViewById(R.id.back)
         colorPallete = view.findViewById(R.id.colorPallete)
@@ -128,7 +124,7 @@ class AddNoteFragment : Fragment() {
 
     @SuppressLint("ResourceAsColor")
     private fun setColor(@ColorRes color: Int) {
-        parentLinearLayout.setBackgroundColor(color)
+        parent.setBackgroundColor(color)
     }
 
 }

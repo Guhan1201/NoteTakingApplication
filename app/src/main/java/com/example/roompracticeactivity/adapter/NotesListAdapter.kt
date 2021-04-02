@@ -6,7 +6,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.DiffUtil.*
+import androidx.recyclerview.widget.DiffUtil.Callback
+import androidx.recyclerview.widget.DiffUtil.calculateDiff
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.database.entities.Notes
@@ -59,9 +60,9 @@ class NotesListDiffCallback(private val oldList: List<Notes>, private val newLis
     override fun getNewListSize(): Int = newList.size
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val (value) = oldList[oldItemPosition]
-        val (value1) = newList[newItemPosition]
-        return value == value1
+        val (oldValue) = oldList[oldItemPosition]
+        val (newValue) = newList[newItemPosition]
+        return oldValue == newValue
     }
 
 }
