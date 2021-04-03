@@ -4,6 +4,7 @@ import androidx.annotation.NonNull
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import java.io.Serializable
 
 @Entity(tableName = "notes_table")
 data class Notes(
@@ -27,4 +28,4 @@ data class Notes(
     @ColumnInfo(name = "back_ground_color")
     val backgroundColor: Int
 
-)
+) : Serializable

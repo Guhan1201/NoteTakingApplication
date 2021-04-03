@@ -8,25 +8,25 @@ import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.StaggeredGridLayoutManager
 import com.example.roompracticeactivity.R
+import com.example.roompracticeactivity.adapter.NotesItemClickListener
 import com.example.roompracticeactivity.adapter.NotesListAdapter
 import com.example.roompracticeactivity.database.entities.Notes
 import com.example.roompracticeactivity.enumClass.Order
 import com.example.roompracticeactivity.viewmodel.NotesListViewModel
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.snackbar.BaseTransientBottomBar
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.note_display.*
 import kotlinx.android.synthetic.main.notes_list_fragment.*
 import kotlin.properties.Delegates
 
 
-class NotesListFragment : Fragment() {
+class NotesListFragment : Fragment(), NotesItemClickListener {
 
     private lateinit var notesViewModel: NotesListViewModel
     private var toggleSwitcher by Delegates.notNull<Boolean>()
@@ -63,6 +63,7 @@ class NotesListFragment : Fragment() {
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
+        adapter.setNotesItemClickListener(this)
 
 
         val itemTouchHelper = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.RIGHT) {
@@ -160,14 +161,8 @@ class NotesListFragment : Fragment() {
 
     private fun setOnclickListener() {
         fab.setOnClickListener {
-            activity?.let {
-                Navigation.findNavController(
-                    it,
-                    R.id.hostFragment
-                )
-            }?.navigate(R.id.action_firstFragment_to_secondFragment)
+            findNavController().navigate(R.id.notes_list_to_add_notes_fragment)
         }
-
         back.setOnClickListener {
             activity?.onBackPressed()
         }
@@ -188,5 +183,13 @@ class NotesListFragment : Fragment() {
         fab.setOnClickListener(null)
         back.setOnClickListener(null)
         changeView.setOnClickListener(null)
+    }
+
+    override fun onClick(notes: Notes) {
+        val bundle = Bundle().apply {
+            putSerializable("notes", notes)
+        }
+        findNavController().navigate(R.id.notes_list_to_edit_notes_fragment, bundle)
+
     }
 }

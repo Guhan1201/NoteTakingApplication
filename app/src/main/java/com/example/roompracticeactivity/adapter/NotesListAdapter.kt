@@ -17,6 +17,7 @@ class NotesListAdapter constructor(
 ) : RecyclerView.Adapter<NotesListAdapter.NotesViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
+    lateinit var listener: NotesItemClickListener
     private var notes = ArrayList<Notes>()
 
     class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -35,6 +36,9 @@ class NotesListAdapter constructor(
         holder.notesTitle.text = current.notesTitle
         holder.notesDescription.text = current.description
         holder.parent.setBackgroundColor(current.backgroundColor)
+        holder.parent.setOnClickListener {
+            listener.onClick(current)
+        }
     }
 
     fun setNotes(words: List<Notes>) {
@@ -43,6 +47,10 @@ class NotesListAdapter constructor(
         notes.clear()
         notes.addAll(words)
         diffResult.dispatchUpdatesTo(this)
+    }
+
+    fun setNotesItemClickListener(notesItemClickListener:NotesItemClickListener) {
+        this.listener = notesItemClickListener
     }
 
     override fun getItemCount() = notes.size
@@ -65,4 +73,8 @@ class NotesListDiffCallback(private val oldList: List<Notes>, private val newLis
         return oldValue == newValue
     }
 
+}
+
+interface NotesItemClickListener {
+    fun onClick(notes : Notes)
 }
