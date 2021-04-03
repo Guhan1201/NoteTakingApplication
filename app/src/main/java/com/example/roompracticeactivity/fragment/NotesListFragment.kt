@@ -2,6 +2,7 @@ package com.example.roompracticeactivity.fragment
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import android.widget.LinearLayout
 import androidx.annotation.RequiresApi
@@ -19,6 +20,7 @@ import com.example.roompracticeactivity.adapter.NotesListAdapter
 import com.example.roompracticeactivity.database.entities.Notes
 import com.example.roompracticeactivity.enumClass.Order
 import com.example.roompracticeactivity.viewmodel.NotesListViewModel
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.note_display.*
@@ -31,12 +33,10 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
     private lateinit var notesViewModel: NotesListViewModel
     private var toggleSwitcher by Delegates.notNull<Boolean>()
     private lateinit var fab: FloatingActionButton
-    private lateinit var back: LinearLayout
-    private lateinit var changeView: LinearLayout
-    private lateinit var toolbar: androidx.appcompat.widget.Toolbar
+    private lateinit var toolbar: MaterialToolbar
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NotesListAdapter
-    private var selectedOrder = Order.NONE
+    private var selectedOrder = Order.NEWEST_ON_TOP
     private lateinit var notesList: List<Notes>
 
     override fun onCreateView(
@@ -116,14 +116,11 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
         }
 
         fab = view.findViewById(R.id.fab)
-        back = view.findViewById(R.id.back)
-        changeView = view.findViewById(R.id.changeFormatView)
         toolbar = view.findViewById(R.id.toolbar)
         toolbar.inflateMenu(R.menu.order_menu)
         toolbar.setOnMenuItemClickListener { item -> onOptionsItemSelected(item) }
-
-
     }
+
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when (item.itemId) {
@@ -137,6 +134,16 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
                 item.isChecked = true
                 selectedOrder = Order.OLDEST_ON_TOP
             }
+            R.id.orderChange -> {
+                if (notesViewModel.staggeredGridLayoutEnable.value!!) {
+                    item.setIcon(R.drawable.ic_resize)
+                    notesViewModel.setStaggeredGridLayoutEnable(false)
+                } else {
+                    item.setIcon(R.drawable.ic_up_arrow)
+                    notesViewModel.setStaggeredGridLayoutEnable(true)
+                }
+            }
+
         }
         return true
     }
@@ -144,8 +151,12 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.order_menu, menu)
         when (selectedOrder) {
-            Order.OLDEST_ON_TOP -> menu.findItem(R.id.oldest_on_top).isChecked = true
-            Order.NEWEST_ON_TOP -> menu.findItem(R.id.newest_on_top).isChecked = true
+            Order.OLDEST_ON_TOP -> {
+                menu.findItem(R.id.oldest_on_top).isChecked = false
+            }
+            Order.NEWEST_ON_TOP -> {
+                menu.findItem(R.id.newest_on_top).isChecked = false
+            }
             Order.NONE -> {
 
             }
@@ -153,36 +164,11 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
         super.onCreateOptionsMenu(menu, inflater)
     }
 
-    override fun onStop() {
-        setOnclickListenerWithNull()
-        super.onStop()
-    }
-
 
     private fun setOnclickListener() {
         fab.setOnClickListener {
             findNavController().navigate(R.id.notes_list_to_add_notes_fragment)
         }
-        back.setOnClickListener {
-            activity?.onBackPressed()
-        }
-
-        changeView.setOnClickListener {
-            if (notesViewModel.staggeredGridLayoutEnable.value!!) {
-                changeFormatImageView.setImageResource(R.drawable.ic_resize)
-                notesViewModel.setStaggeredGridLayoutEnable(false)
-            } else {
-                changeFormatImageView.setImageResource(R.drawable.ic_up_arrow)
-                notesViewModel.setStaggeredGridLayoutEnable(true)
-            }
-        }
-
-    }
-
-    private fun setOnclickListenerWithNull() {
-        fab.setOnClickListener(null)
-        back.setOnClickListener(null)
-        changeView.setOnClickListener(null)
     }
 
     override fun onClick(notes: Notes) {
@@ -190,6 +176,5 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
             putSerializable("notes", notes)
         }
         findNavController().navigate(R.id.notes_list_to_edit_notes_fragment, bundle)
-
     }
 }

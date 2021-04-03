@@ -2,9 +2,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/favorite"
+        android:id="@+id/orderChange"
         android:icon="@drawable/ic_resize"
-        android:title="string/favorite"
+        android:title="@string/orderchange"
         app:showAsAction="ifRoom" />
+
 
 </menu>

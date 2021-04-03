@@ -14,6 +14,7 @@ import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.config
 import com.example.roompracticeactivity.database.entities.Notes
@@ -111,8 +112,9 @@ class AddNoteFragment : Fragment() {
     }
 
     private fun backPressed() {
-        requireActivity().onBackPressed()
+        findNavController().navigateUp()
     }
+
 
     @SuppressLint("ResourceAsColor")
     private fun setColor(@ColorRes color: Int) {
