@@ -9,13 +9,13 @@ import androidx.annotation.ColorRes
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
 import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.database.entities.Notes
 import com.example.roompracticeactivity.viewmodel.NotesListViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dev.sasikanth.colorsheet.ColorSheet
-import kotlinx.android.synthetic.main.notes_list_fragment.*
 
 class EditNotesFragment : Fragment(R.layout.fragment_edit_notes) {
 
@@ -27,6 +27,7 @@ class EditNotesFragment : Fragment(R.layout.fragment_edit_notes) {
     private lateinit var notesViewModel: NotesListViewModel
     private lateinit var colorPallete: ImageView
     private lateinit var colors: IntArray
+    private lateinit var notes: Notes
 
     private var selectedColor: Int = ColorSheet.NO_COLOR
 
@@ -41,7 +42,7 @@ class EditNotesFragment : Fragment(R.layout.fragment_edit_notes) {
         save = view.findViewById(R.id.save)
         colors = resources.getIntArray(R.array.colors)
         colorPallete = view.findViewById(R.id.colorPallete)
-        val notes = arguments?.get("notes") as Notes
+        notes = arguments?.get("notes") as Notes
         notesTitle.setText(notes.notesTitle)
         notesDescription.setText(notes.description)
         selectedColor = notes.backgroundColor
@@ -69,10 +70,27 @@ class EditNotesFragment : Fragment(R.layout.fragment_edit_notes) {
                 .show(requireActivity().supportFragmentManager)
         }
 
+        toolbar.setNavigationOnClickListener {
+            findNavController().navigateUp()
+        }
+
+        toolbar.setOnMenuItemClickListener {
+            when (it.itemId) {
+                R.id.delete -> {
+                    notesViewModel.deleteNotes(notes = notes)
+                    backPressed()
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
     }
 
+
     private fun backPressed() {
-        requireActivity().onBackPressed()
+        findNavController().navigateUp()
     }
 
     @SuppressLint("ResourceAsColor")

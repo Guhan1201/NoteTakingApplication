@@ -9,6 +9,7 @@
 
     <color name="title_text_color">#333333</color>
     <color name="note_text_color">#11111E</color>
+    <color name="hint_color">#979797</color>
 
     <array name="colors">
         <item>#F44336</item>

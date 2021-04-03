@@ -18,6 +18,7 @@
             style="@style/Widget.MaterialComponents.Toolbar.Surface"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/edit_note_menu"
             app:navigationIcon="@drawable/ic_arrow_back_black_24dp"
             app:title="@string/edit_note"
             tools:title="@string/edit_note" />

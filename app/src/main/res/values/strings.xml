@@ -18,4 +18,5 @@
     <string name="notes_deleted">Notes is deleted</string>
     <string name="undo">UNDO</string>
     <string name="orderchange">orderChange</string>
+    <string name="delete">delete</string>
 </resources>

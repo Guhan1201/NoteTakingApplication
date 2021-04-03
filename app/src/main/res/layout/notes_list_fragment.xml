@@ -16,7 +16,7 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/toolbar"
             style="@style/Widget.MaterialComponents.Toolbar.Surface"
-            app:menu="@menu/top_app_bar"
+            app:menu="@menu/note_list_menu"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             app:title="@string/notes_taking_application"
