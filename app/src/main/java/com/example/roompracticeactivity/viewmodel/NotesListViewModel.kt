@@ -57,4 +57,10 @@ class NotesListViewModel(application: Application) : AndroidViewModel(applicatio
         }
     }
 
+    fun updateNotes(notes: Notes) {
+        viewModelScope.launch {
+            repository.update(notes)
+        }
+    }
+
 }

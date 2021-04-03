@@ -23,5 +23,9 @@ class NotesRepository(
         notesDao.delete(id)
     }
 
+    suspend fun update(notes: Notes) {
+        notesDao.update(notes)
+    }
+
 
 }
