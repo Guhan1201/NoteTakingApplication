@@ -6,43 +6,51 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
-import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.DiffUtil.*
+import androidx.recyclerview.widget.DiffUtil.Callback
+import androidx.recyclerview.widget.DiffUtil.calculateDiff
 import androidx.recyclerview.widget.RecyclerView
 import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.database.entities.Notes
 
-class NotesListAdapter internal constructor(
+class NotesListAdapter constructor(
     context: Context?
-) : RecyclerView.Adapter<NotesListAdapter.WordViewHolder>() {
+) : RecyclerView.Adapter<NotesListAdapter.NotesViewHolder>() {
 
     private val inflater: LayoutInflater = LayoutInflater.from(context)
+    lateinit var listener: NotesItemClickListener
     private var notes = ArrayList<Notes>()
 
-    inner class WordViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+    class NotesViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val notesTitle: TextView = itemView.findViewById(R.id.notes_title) as TextView
         val notesDescription = itemView.findViewById(R.id.notes_description) as TextView
         val parent = itemView.findViewById(R.id.parent) as ConstraintLayout
     }
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WordViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): NotesViewHolder {
         val itemView = inflater.inflate(R.layout.note_display, parent, false)
-        return WordViewHolder(itemView)
+        return NotesViewHolder(itemView)
     }
 
-    override fun onBindViewHolder(holder: WordViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: NotesViewHolder, position: Int) {
         val current = notes[position]
         holder.notesTitle.text = current.notesTitle
         holder.notesDescription.text = current.description
         holder.parent.setBackgroundColor(current.backgroundColor)
+        holder.parent.setOnClickListener {
+            listener.onClick(current)
+        }
     }
 
-    internal fun setWords(words: List<Notes>) {
+    fun setNotes(words: List<Notes>) {
         val diffCallback = NotesListDiffCallback(notes, words)
         val diffResult = calculateDiff(diffCallback)
         notes.clear()
         notes.addAll(words)
         diffResult.dispatchUpdatesTo(this)
+    }
+
+    fun setNotesItemClickListener(notesItemClickListener:NotesItemClickListener) {
+        this.listener = notesItemClickListener
     }
 
     override fun getItemCount() = notes.size
@@ -60,9 +68,13 @@ class NotesListDiffCallback(private val oldList: List<Notes>, private val newLis
     override fun getNewListSize(): Int = newList.size
 
     override fun areContentsTheSame(oldItemPosition: Int, newItemPosition: Int): Boolean {
-        val (value) = oldList[oldItemPosition]
-        val (value1) = newList[newItemPosition]
-        return value == value1
+        val (oldValue) = oldList[oldItemPosition]
+        val (newValue) = newList[newItemPosition]
+        return oldValue == newValue
     }
 
+}
+
+interface NotesItemClickListener {
+    fun onClick(notes : Notes)
 }

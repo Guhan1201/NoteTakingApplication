@@ -9,9 +9,14 @@
     <string name="title">title</string>
     <string name="description">description</string>
     <string name="add_note">Add Note</string>
-    <string name="notes_list">notes list</string>
+    <string name="edit_note">Edit Note</string>
+    <string name="notes_taking_application">Note Taking Application</string>
     <string name="order">order</string>
     <string name="newest_on_top">newest on top</string>
     <string name="oldest_on_top">oldest on top</string>
     <string name="title_should_not_be_empty">Notes Title should not be empty</string>
+    <string name="notes_deleted">Notes is deleted</string>
+    <string name="undo">UNDO</string>
+    <string name="orderchange">orderChange</string>
+    <string name="delete">delete</string>
 </resources>

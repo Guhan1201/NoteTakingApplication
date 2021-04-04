@@ -10,9 +10,11 @@
         android:label="navigation_first_fragment"
         tools:layout="@layout/notes_list_fragment">
         <action
-            android:id="@+id/action_firstFragment_to_secondFragment"
-            app:destination="@id/addNotesFragment"
-            app:enterAnim="@anim/nav_default_enter_anim" />
+            android:id="@+id/notes_list_to_add_notes_fragment"
+            app:destination="@id/addNotesFragment" />
+        <action
+            android:id="@+id/notes_list_to_edit_notes_fragment"
+            app:destination="@id/editNotesFragment" />
     </fragment>
 
     <fragment
@@ -20,4 +22,14 @@
         android:name="com.example.roompracticeactivity.fragment.AddNoteFragment"
         android:label="addNotesFragment"
         tools:layout="@layout/fragment_add_note" />
+
+    <fragment
+        android:id="@+id/editNotesFragment"
+        android:name="com.example.roompracticeactivity.fragment.EditNotesFragment"
+        android:label="editNotesFragment"
+        tools:layout="@layout/fragment_edit_notes">
+        <argument
+            android:name="notes"
+            app:argType="com.example.roompracticeactivity.database.entities" />
+    </fragment>
 </navigation>

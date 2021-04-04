@@ -19,5 +19,8 @@ interface NotesDao {
     @Query("DELETE FROM notes_table WHERE notes_uid = :notesid")
     suspend fun delete(notesid: String)
 
+    @Update
+    suspend fun update(notes: Notes)
+
 
 }

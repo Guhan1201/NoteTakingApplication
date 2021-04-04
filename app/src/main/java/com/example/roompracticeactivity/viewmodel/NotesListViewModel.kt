@@ -5,17 +5,17 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.viewModelScope
-import com.example.roompracticeactivity.database.NotesRoomDatabase
 import com.example.roompracticeactivity.database.entities.Notes
 import com.example.roompracticeactivity.database.repository.NotesRepository
-import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 
 class NotesListViewModel(application: Application) : AndroidViewModel(application) {
 
-    private val repository: NotesRepository
+    private val repository: NotesRepository = NotesRepository(application)
 
     var allNotes: LiveData<List<Notes>>
+
+    var referenceAllNotes = MutableLiveData<List<Notes>>()
 
     private var _reversedLiveData = MutableLiveData<List<Notes>>()
     val reversedLiveData: LiveData<List<Notes>>
@@ -27,9 +27,8 @@ class NotesListViewModel(application: Application) : AndroidViewModel(applicatio
 
 
     init {
-        val wordsDao = NotesRoomDatabase.getDatabase(application).notesDao()
-        repository = NotesRepository(wordsDao)
         allNotes = repository.allNotes
+        referenceAllNotes.value = repository.allNotes.value
     }
 
     fun setOrderAsNewestOnTop() {
@@ -45,10 +44,23 @@ class NotesListViewModel(application: Application) : AndroidViewModel(applicatio
     }
 
     fun deleteNotes(notes: Notes) {
-        GlobalScope.launch {
+        viewModelScope.launch {
             notes.notesUid.let {
                 repository.delete(it)
             }
         }
     }
+
+    fun insertNotes(notes: Notes) {
+        viewModelScope.launch {
+            repository.insert(notes)
+        }
+    }
+
+    fun updateNotes(notes: Notes) {
+        viewModelScope.launch {
+            repository.update(notes)
+        }
+    }
+
 }
