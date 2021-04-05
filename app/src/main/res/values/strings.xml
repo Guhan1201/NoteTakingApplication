@@ -6,8 +6,8 @@
     <string name="empty_not_saved">Word not saved because it is empty.</string>
     <string name="addtitile">add title</string>
     <string name="add_description">add description</string>
-    <string name="title">title</string>
-    <string name="description">description</string>
+    <string name="title">Title</string>
+    <string name="description">Add Description</string>
     <string name="add_note">Add Note</string>
     <string name="edit_note">Edit Note</string>
     <string name="notes_taking_application">Note Taking Application</string>
