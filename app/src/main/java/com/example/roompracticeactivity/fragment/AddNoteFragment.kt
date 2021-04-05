@@ -1,17 +1,19 @@
 package com.example.roompracticeactivity.fragment
 
 import android.annotation.SuppressLint
+import android.app.DatePickerDialog
+import android.app.TimePickerDialog
 import android.os.Build
 import android.os.Bundle
 import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.EditText
-import android.widget.ImageView
+import android.widget.*
 import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
@@ -20,12 +22,15 @@ import com.example.roompracticeactivity.config
 import com.example.roompracticeactivity.database.entities.Notes
 import com.example.roompracticeactivity.viewmodel.NotesListViewModel
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import dev.sasikanth.colorsheet.ColorSheet
+import java.util.*
 
 
-class AddNoteFragment : Fragment() {
+class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
+    TimePickerDialog.OnTimeSetListener {
 
     private lateinit var notesViewModel: NotesListViewModel
     private lateinit var notesTitle: EditText
@@ -35,7 +40,10 @@ class AddNoteFragment : Fragment() {
     private lateinit var colors: IntArray
     private lateinit var save: FloatingActionButton
     private lateinit var toolbar: MaterialToolbar
+    private lateinit var setRemainder: ExtendedFloatingActionButton
+    private lateinit var dateTime: DateTime
 
+    private lateinit var calendar: Calendar
     private var selectedColor: Int = ColorSheet.NO_COLOR
 
 
@@ -63,6 +71,12 @@ class AddNoteFragment : Fragment() {
                 backPressed()
             }
         }
+        setRemainder.setOnClickListener {
+            val datePicker: DialogFragment =
+                com.example.roompracticeactivity.picker.DatePicker(this)
+            datePicker.show(requireActivity().supportFragmentManager, "setRemainder")
+        }
+
 
 
         colorPallete.setOnClickListener {
@@ -84,7 +98,7 @@ class AddNoteFragment : Fragment() {
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-
+        dateTime = DateTime()
         notesViewModel = ViewModelProvider(this).get(NotesListViewModel::class.java)
         notesTitle = view.findViewById(R.id.edit_word)
         notesDescription = view.findViewById(R.id.description)
@@ -93,6 +107,8 @@ class AddNoteFragment : Fragment() {
         save = view.findViewById(R.id.save)
         colorPallete = view.findViewById(R.id.colorPallete)
         toolbar = view.findViewById(R.id.topAppBar)
+        setRemainder = view.findViewById(R.id.setRemainder)
+        calendar = Calendar.getInstance()
 
     }
 
@@ -122,4 +138,27 @@ class AddNoteFragment : Fragment() {
         toolbar.setBackgroundColor(color)
     }
 
+    override fun onDateSet(view: DatePicker?, year: Int, month: Int, dayOfMonth: Int) {
+        view?.isShown?.let {
+            dateTime = dateTime.copy(year = year, month = month + 1, dayOfMonth = dayOfMonth)
+        }
+        val timePicker: DialogFragment = com.example.roompracticeactivity.picker.TimePicker(this)
+        timePicker.show(requireActivity().supportFragmentManager, "onDateSet")
+    }
+
+    override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
+        view?.isShown?.let {
+            dateTime = dateTime.copy(hourOfDay = hourOfDay, minute = minute)
+            Toast.makeText(requireContext(), dateTime.toString(), Toast.LENGTH_SHORT).show()
+        }
+
+    }
 }
+
+data class DateTime(
+    private val minute: Int? = null,
+    private val hourOfDay: Int? = null,
+    private val dayOfMonth: Int? = null,
+    private val month: Int? = null,
+    private val year: Int? = null
+)
