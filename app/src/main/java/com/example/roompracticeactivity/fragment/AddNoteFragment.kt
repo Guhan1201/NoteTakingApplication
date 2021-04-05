@@ -9,7 +9,10 @@ import android.text.TextUtils
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.*
+import android.widget.DatePicker
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.TimePicker
 import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
@@ -26,8 +29,10 @@ import com.google.android.material.floatingactionbutton.ExtendedFloatingActionBu
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.snackbar.Snackbar
 import dev.sasikanth.colorsheet.ColorSheet
+import java.text.SimpleDateFormat
 import java.util.*
 
+const val DATE_TIME_COMPONENT_FORMAT = "MMM dd | hh:mm a"
 
 class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
@@ -74,7 +79,7 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         setRemainder.setOnClickListener {
             val datePicker: DialogFragment =
                 com.example.roompracticeactivity.picker.DatePicker(this)
-            datePicker.show(requireActivity().supportFragmentManager, "setRemainder")
+            datePicker.show(requireActivity().supportFragmentManager, datePicker.tag)
         }
 
 
@@ -108,7 +113,6 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         colorPallete = view.findViewById(R.id.colorPallete)
         toolbar = view.findViewById(R.id.topAppBar)
         setRemainder = view.findViewById(R.id.setRemainder)
-        calendar = Calendar.getInstance()
 
     }
 
@@ -143,13 +147,24 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             dateTime = dateTime.copy(year = year, month = month + 1, dayOfMonth = dayOfMonth)
         }
         val timePicker: DialogFragment = com.example.roompracticeactivity.picker.TimePicker(this)
-        timePicker.show(requireActivity().supportFragmentManager, "onDateSet")
+        timePicker.show(requireActivity().supportFragmentManager, timePicker.tag)
     }
 
+    @SuppressLint("SimpleDateFormat")
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         view?.isShown?.let {
             dateTime = dateTime.copy(hourOfDay = hourOfDay, minute = minute)
-            Toast.makeText(requireContext(), dateTime.toString(), Toast.LENGTH_SHORT).show()
+            calendar = Calendar.getInstance()
+            calendar.set(
+                dateTime.getYear(),
+                dateTime.getMonth(),
+                dateTime.getDayOfMonth(),
+                dateTime.getHourOfDay(),
+                dateTime.getMinute()
+            )
+            val date = calendar.time
+            val format = SimpleDateFormat(DATE_TIME_COMPONENT_FORMAT)
+            setRemainder.text = format.format(date)
         }
 
     }
@@ -161,4 +176,14 @@ data class DateTime(
     private val dayOfMonth: Int? = null,
     private val month: Int? = null,
     private val year: Int? = null
-)
+) {
+    fun getMinute(): Int = this.minute!!
+
+    fun getYear(): Int = this.year!!
+
+    fun getMonth(): Int = this.month!!
+
+    fun getHourOfDay(): Int = this.hourOfDay!!
+
+    fun getDayOfMonth(): Int = this.dayOfMonth!!
+}
