@@ -15,7 +15,9 @@ class DatePicker(private val listener: DatePickerDialog.OnDateSetListener) : Dia
         val year = calender[Calendar.YEAR]
         val month = calender[Calendar.MONTH]
         val day = calender[Calendar.DAY_OF_MONTH]
-        return DatePickerDialog(activity!!, listener, year, month, day)
+        val datePicker = DatePickerDialog(activity!!, listener, year, month, day)
+        datePicker.datePicker.minDate = System.currentTimeMillis() - 1000
+        return datePicker
     }
 
 
@@ -25,7 +27,7 @@ class TimePicker(private val listener: TimePickerDialog.OnTimeSetListener) : Dia
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         val calender = Calendar.getInstance()
-        val hour = calender[Calendar.HOUR]
+        val hour = calender[Calendar.HOUR_OF_DAY]
         val minute = calender[Calendar.MINUTE]
         return TimePickerDialog(activity!!, listener, hour, minute, false)
     }

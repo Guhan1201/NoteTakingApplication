@@ -20,7 +20,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.work.OneTimeWorkRequest
+import androidx.work.WorkManager
 import com.example.roompracticeactivity.R
+import com.example.roompracticeactivity.workmanager.RemainderWorker
 import com.example.roompracticeactivity.config
 import com.example.roompracticeactivity.database.entities.Notes
 import com.example.roompracticeactivity.viewmodel.NotesListViewModel
@@ -31,6 +34,7 @@ import com.google.android.material.snackbar.Snackbar
 import dev.sasikanth.colorsheet.ColorSheet
 import java.text.SimpleDateFormat
 import java.util.*
+import java.util.concurrent.TimeUnit
 
 const val DATE_TIME_COMPONENT_FORMAT = "MMM dd | hh:mm a"
 
@@ -73,6 +77,7 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
                 snack.show()
             } else {
                 insertNotes()
+                setRemainderNotification()
                 backPressed()
             }
         }
@@ -96,9 +101,11 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
                     })
                 .show(requireActivity().supportFragmentManager)
         }
-
-
         super.onStart()
+    }
+
+    private fun setRemainderNotification() {
+
     }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
@@ -150,6 +157,7 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         timePicker.show(requireActivity().supportFragmentManager, timePicker.tag)
     }
 
+    @RequiresApi(Build.VERSION_CODES.M)
     @SuppressLint("SimpleDateFormat")
     override fun onTimeSet(view: TimePicker?, hourOfDay: Int, minute: Int) {
         view?.isShown?.let {
@@ -157,7 +165,7 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             calendar = Calendar.getInstance()
             calendar.set(
                 dateTime.getYear(),
-                dateTime.getMonth(),
+                dateTime.getMonth() - 1,
                 dateTime.getDayOfMonth(),
                 dateTime.getHourOfDay(),
                 dateTime.getMinute()
@@ -165,6 +173,13 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             val date = calendar.time
             val format = SimpleDateFormat(DATE_TIME_COMPONENT_FORMAT)
             setRemainder.text = format.format(date)
+
+            val timeDiff = calendar.timeInMillis - System.currentTimeMillis()
+            val dailyWorkRequest = OneTimeWorkRequest.Builder(RemainderWorker::class.java)
+                .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
+                .build()
+            WorkManager.getInstance(requireContext()).enqueue(dailyWorkRequest)
+
         }
 
     }

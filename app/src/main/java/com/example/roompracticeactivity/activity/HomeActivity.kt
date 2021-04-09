@@ -17,6 +17,4 @@ class HomeActivity : AppCompatActivity() {
             R.id.hostFragment
         )
     }
-
-
 }
