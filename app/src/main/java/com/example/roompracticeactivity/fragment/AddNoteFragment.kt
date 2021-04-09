@@ -20,6 +20,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.work.Data
 import androidx.work.OneTimeWorkRequest
 import androidx.work.WorkManager
 import com.example.roompracticeactivity.R
@@ -41,6 +42,10 @@ const val DATE_TIME_COMPONENT_FORMAT = "MMM dd | hh:mm a"
 class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
 
+    companion object {
+        val UNIQUE_ID = "UNIQUE_ID"
+    }
+
     private lateinit var notesViewModel: NotesListViewModel
     private lateinit var notesTitle: EditText
     private lateinit var notesDescription: EditText
@@ -54,6 +59,7 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
 
     private lateinit var calendar: Calendar
     private var selectedColor: Int = ColorSheet.NO_COLOR
+    private lateinit var notes: Notes
 
 
     override fun onCreateView(
@@ -104,9 +110,6 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
         super.onStart()
     }
 
-    private fun setRemainderNotification() {
-
-    }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -125,17 +128,37 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
 
     private fun insertNotes() {
         val timeCreated = System.currentTimeMillis()
-
-        notesViewModel.insertNotes(
-            Notes(
-                timeCreated.toString(),
-                notesTitle.text.toString(),
-                notesDescription.text.toString(),
-                timeCreated,
-                timeCreated,
-                selectedColor
-            )
+        notes = Notes(
+            timeCreated.toString(),
+            notesTitle.text.toString(),
+            notesDescription.text.toString(),
+            timeCreated,
+            timeCreated,
+            selectedColor,
+            if (this::calendar.isInitialized) {
+                calendar.timeInMillis
+            } else {
+                null
+            }
         )
+        notesViewModel.insertNotes(
+            notes
+        )
+    }
+
+    private fun setRemainderNotification() {
+        val data = Data.Builder()
+            .putLong(UNIQUE_ID, notes.createdTime)
+            .build()
+        if (this::calendar.isInitialized) {
+            val timeDiff = calendar.timeInMillis - System.currentTimeMillis()
+            val dailyWorkRequest = OneTimeWorkRequest.Builder(RemainderWorker::class.java)
+                .setInputData(data)
+                .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
+                .build()
+            WorkManager.getInstance(requireContext()).enqueue(dailyWorkRequest)
+        }
+
     }
 
     private fun backPressed() {
@@ -173,13 +196,6 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
             val date = calendar.time
             val format = SimpleDateFormat(DATE_TIME_COMPONENT_FORMAT)
             setRemainder.text = format.format(date)
-
-            val timeDiff = calendar.timeInMillis - System.currentTimeMillis()
-            val dailyWorkRequest = OneTimeWorkRequest.Builder(RemainderWorker::class.java)
-                .setInitialDelay(timeDiff, TimeUnit.MILLISECONDS)
-                .build()
-            WorkManager.getInstance(requireContext()).enqueue(dailyWorkRequest)
-
         }
 
     }

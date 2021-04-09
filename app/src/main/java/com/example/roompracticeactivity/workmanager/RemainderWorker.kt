@@ -7,29 +7,41 @@ import android.content.Context
 import android.content.Intent
 import android.media.RingtoneManager
 import android.os.Build
+import android.os.Bundle
 import androidx.core.app.NotificationCompat
+import androidx.navigation.NavDeepLinkBuilder
+import androidx.work.CoroutineWorker
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.activity.HomeActivity
+import com.example.roompracticeactivity.database.NotesRoomDatabase
+import com.example.roompracticeactivity.database.dao.NotesDao
+import com.example.roompracticeactivity.fragment.AddNoteFragment.Companion.UNIQUE_ID
+import com.example.roompracticeactivity.fragment.EditNotesFragment.Companion.NOTES
 
-class RemainderWorker(private val ctx: Context, params: WorkerParameters) : Worker(ctx, params) {
-    override fun doWork(): Result {
+class RemainderWorker(private val ctx: Context, params: WorkerParameters) :
+    CoroutineWorker(ctx, params) {
+    override suspend fun doWork(): Result {
+        val notesDao: NotesDao = NotesRoomDatabase.getDatabase(ctx).notesDao()
+        val notes = notesDao.getNotes(inputData.getLong(UNIQUE_ID, 0).toString())
+        val bundle = Bundle().apply {
+            putSerializable(NOTES, notes)
+        }
 
-        val intent = Intent(ctx, HomeActivity::class.java)
-        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
-        val pendingIntent = PendingIntent.getActivity(
-            ctx, 0, intent,
-            PendingIntent.FLAG_ONE_SHOT
-        )
-
+        val pendingIntent = NavDeepLinkBuilder(ctx)
+            .setComponentName(HomeActivity::class.java) // your destination activity
+            .setGraph(R.navigation.nav_graph)
+            .setDestination(R.id.editNotesFragment)
+            .setArguments(bundle)
+            .createPendingIntent()
         val channelId = "channelId"
         val channelName = "channelName"
         val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
         val notificationBuilder = NotificationCompat.Builder(ctx, channelId)
             .setSmallIcon(R.drawable.ic_alarm)
-            .setContentTitle("Notification Test")
-            .setContentText("Notification")
+            .setContentTitle(notes.notesTitle)
+            .setContentText("Tap to view notes")
             .setAutoCancel(true)
             .setPriority(NotificationCompat.PRIORITY_HIGH)
             .setSound(defaultSoundUri)

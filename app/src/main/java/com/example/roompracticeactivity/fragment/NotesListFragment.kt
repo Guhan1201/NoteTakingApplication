@@ -17,6 +17,7 @@ import com.example.roompracticeactivity.adapter.NotesItemClickListener
 import com.example.roompracticeactivity.adapter.NotesListAdapter
 import com.example.roompracticeactivity.database.entities.Notes
 import com.example.roompracticeactivity.enumClass.Order
+import com.example.roompracticeactivity.fragment.EditNotesFragment.Companion.NOTES
 import com.example.roompracticeactivity.viewmodel.NotesListViewModel
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -170,7 +171,7 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
 
     override fun onClick(notes: Notes) {
         val bundle = Bundle().apply {
-            putSerializable("notes", notes)
+            putSerializable(NOTES, notes)
         }
         findNavController().navigate(R.id.notes_list_to_edit_notes_fragment, bundle)
     }

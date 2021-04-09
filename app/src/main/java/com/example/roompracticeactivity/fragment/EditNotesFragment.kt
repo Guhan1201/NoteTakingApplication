@@ -19,6 +19,10 @@ import dev.sasikanth.colorsheet.ColorSheet
 
 class EditNotesFragment : Fragment(R.layout.fragment_edit_notes) {
 
+    companion object {
+        val NOTES = "notes"
+    }
+
     private lateinit var notesTitle: EditText
     private lateinit var notesDescription: EditText
     private lateinit var save: FloatingActionButton
@@ -42,7 +46,7 @@ class EditNotesFragment : Fragment(R.layout.fragment_edit_notes) {
         save = view.findViewById(R.id.save)
         colors = resources.getIntArray(R.array.colors)
         colorPallete = view.findViewById(R.id.colorPallete)
-        notes = arguments?.get("notes") as Notes
+        notes = arguments?.get(NOTES) as Notes
         notesTitle.setText(notes.notesTitle)
         notesDescription.setText(notes.description)
         selectedColor = notes.backgroundColor
@@ -52,7 +56,8 @@ class EditNotesFragment : Fragment(R.layout.fragment_edit_notes) {
             val updatedNotes = notes.copy(
                 notesTitle = notesTitle.text.toString(),
                 description = notesDescription.text.toString(),
-                backgroundColor = selectedColor
+                backgroundColor = selectedColor,
+                last_modified_time = System.currentTimeMillis()
             )
             notesViewModel.updateNotes(updatedNotes)
             backPressed()
