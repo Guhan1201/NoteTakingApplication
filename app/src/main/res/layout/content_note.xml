@@ -26,7 +26,7 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Headline6"
             android:textColor="@color/title_text_color"
             android:textStyle="bold"
-            android:textColorHint="@color/hint_color"
+            android:textColorHint="@color/black"
             app:layout_constraintEnd_toStartOf="@+id/colorPallete"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
@@ -46,6 +46,24 @@
             app:layout_constraintStart_toEndOf="@+id/edit_word"
             app:layout_constraintTop_toTopOf="@+id/edit_word" />
 
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/setRemainder"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="16dp"
+            app:icon="@drawable/ic_alarm"
+            android:text="@string/set_remainder"
+            android:layout_gravity="start"
+            android:backgroundTint="?attr/colorOnPrimary"
+            app:iconTint="@color/black"
+            android:textColor="@color/black"
+            app:strokeWidth="1dp"
+            app:strokeColor="@color/black"
+            android:padding="10dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/edit_word"/>
+
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/description"
             android:layout_width="match_parent"
@@ -62,7 +80,7 @@
             android:textAppearance="@style/TextAppearance.MaterialComponents.Body1"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/edit_word" />
+            app:layout_constraintTop_toBottomOf="@+id/setRemainder" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

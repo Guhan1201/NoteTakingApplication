@@ -26,6 +26,9 @@ data class Notes(
     val last_modified_time: Long,
 
     @ColumnInfo(name = "back_ground_color")
-    val backgroundColor: Int
+    val backgroundColor: Int,
+
+    @ColumnInfo(name = "scheduled_alaram_time")
+    val alaram_time : Long? = null
 
 ) : Serializable

@@ -6,7 +6,7 @@ import android.util.AttributeSet
 
 
 class CustomEditTextWithBullets(
-    context: Context?,
+    context: Context,
     attrs: AttributeSet?
 ) : androidx.appcompat.widget.AppCompatEditText(context, attrs, R.attr.editTextStyle) {
 

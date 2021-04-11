@@ -22,5 +22,8 @@ interface NotesDao {
     @Update
     suspend fun update(notes: Notes)
 
+    @Query("SELECT * FROM notes_table WHERE notes_uid = :notesid")
+    suspend fun getNotes(notesid: String) : Notes
+
 
 }

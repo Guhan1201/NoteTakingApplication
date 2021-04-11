@@ -11,10 +11,20 @@
         tools:layout="@layout/notes_list_fragment">
         <action
             android:id="@+id/notes_list_to_add_notes_fragment"
-            app:destination="@id/addNotesFragment" />
+            app:destination="@id/addNotesFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
+            app:popUpToInclusive="true" />
         <action
             android:id="@+id/notes_list_to_edit_notes_fragment"
-            app:destination="@id/editNotesFragment" />
+            app:destination="@id/editNotesFragment"
+            app:enterAnim="@android:anim/slide_in_left"
+            app:exitAnim="@android:anim/slide_out_right"
+            app:popEnterAnim="@android:anim/slide_in_left"
+            app:popExitAnim="@android:anim/slide_out_right"
+            />
     </fragment>
 
     <fragment
