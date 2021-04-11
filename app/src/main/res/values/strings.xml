@@ -19,5 +19,6 @@
     <string name="undo">UNDO</string>
     <string name="orderchange">orderChange</string>
     <string name="delete">delete</string>
+    <string name="share">share</string>
     <string name="set_remainder">Set Remainder</string>
 </resources>
