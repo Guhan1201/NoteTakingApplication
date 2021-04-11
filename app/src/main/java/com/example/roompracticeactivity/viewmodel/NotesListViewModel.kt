@@ -13,9 +13,8 @@ class NotesListViewModel(application: Application) : AndroidViewModel(applicatio
 
     private val repository: NotesRepository = NotesRepository(application)
 
-    var allNotes: LiveData<List<Notes>>
+    var allNotes: LiveData<List<Notes>> = repository.allNotes
 
-    var referenceAllNotes = MutableLiveData<List<Notes>>()
 
     private var _reversedLiveData = MutableLiveData<List<Notes>>()
     val reversedLiveData: LiveData<List<Notes>>
@@ -26,13 +25,8 @@ class NotesListViewModel(application: Application) : AndroidViewModel(applicatio
         get() = _staggeredGridLayoutEnable
 
 
-    init {
-        allNotes = repository.allNotes
-        referenceAllNotes.value = repository.allNotes.value
-    }
-
     fun setOrderAsNewestOnTop() {
-        _reversedLiveData.postValue(repository.allNotes.value?.reversed())
+        _reversedLiveData.postValue(allNotes.value?.reversed())
     }
 
     fun setOrderAsOldestOnTop() {

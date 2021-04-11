@@ -6,6 +6,7 @@
             android:title="@string/newest_on_top" />
         <item
             android:id="@+id/oldest_on_top"
+            android:checked="true"
             android:title="@string/oldest_on_top" />
     </group>
 

@@ -2,6 +2,7 @@ package com.example.roompracticeactivity.fragment
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
@@ -29,7 +30,6 @@ import kotlin.properties.Delegates
 class NotesListFragment : Fragment(), NotesItemClickListener {
 
     private lateinit var notesViewModel: NotesListViewModel
-    private var toggleSwitcher by Delegates.notNull<Boolean>()
     private lateinit var fab: FloatingActionButton
     private lateinit var toolbar: MaterialToolbar
     private lateinit var recyclerView: RecyclerView
@@ -88,10 +88,6 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
         val setItemTouchHelper = ItemTouchHelper(itemTouchHelper)
         setItemTouchHelper.attachToRecyclerView(recyclerView)
 
-
-        toggleSwitcher = false
-
-
         with(notesViewModel) {
             allNotes.observe(viewLifecycleOwner, Observer { words ->
                 notesList = words
@@ -109,7 +105,6 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
                     recyclerView.layoutManager =
                         LinearLayoutManager(requireContext())
                 }
-
             })
         }
 
@@ -147,19 +142,8 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.order_change_menu, menu)
-        when (selectedOrder) {
-            Order.OLDEST_ON_TOP -> {
-                menu.findItem(R.id.oldest_on_top).isChecked = true
-            }
-            Order.NEWEST_ON_TOP -> {
-                menu.findItem(R.id.newest_on_top).isChecked = true
-            }
-            Order.NONE -> {
-
-            }
-        }
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
 
