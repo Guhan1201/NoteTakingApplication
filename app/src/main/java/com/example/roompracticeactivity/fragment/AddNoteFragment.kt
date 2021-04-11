@@ -37,13 +37,13 @@ import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.TimeUnit
 
-const val DATE_TIME_COMPONENT_FORMAT = "MMM dd | hh:mm a"
 
 class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
     TimePickerDialog.OnTimeSetListener {
 
     companion object {
         val UNIQUE_ID = "UNIQUE_ID"
+        val DATE_TIME_COMPONENT_FORMAT = "MMM dd | hh:mm a"
     }
 
     private lateinit var notesViewModel: NotesListViewModel
@@ -79,7 +79,6 @@ class AddNoteFragment : Fragment(), DatePickerDialog.OnDateSetListener,
                     getString(R.string.title_should_not_be_empty),
                     Snackbar.LENGTH_LONG
                 )
-                snack.config(requireContext())
                 snack.show()
             } else {
                 insertNotes()

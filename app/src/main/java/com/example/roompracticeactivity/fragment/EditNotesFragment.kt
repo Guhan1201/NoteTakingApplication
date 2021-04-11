@@ -1,6 +1,7 @@
 package com.example.roompracticeactivity.fragment
 
 import android.annotation.SuppressLint
+import android.graphics.Paint
 import android.os.Bundle
 import android.view.View
 import android.widget.EditText
@@ -12,10 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import com.example.roompracticeactivity.R
 import com.example.roompracticeactivity.database.entities.Notes
+import com.example.roompracticeactivity.fragment.AddNoteFragment.Companion.DATE_TIME_COMPONENT_FORMAT
 import com.example.roompracticeactivity.viewmodel.NotesListViewModel
 import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import dev.sasikanth.colorsheet.ColorSheet
+import java.text.SimpleDateFormat
 
 class EditNotesFragment : Fragment(R.layout.fragment_edit_notes) {
 
@@ -32,6 +36,7 @@ class EditNotesFragment : Fragment(R.layout.fragment_edit_notes) {
     private lateinit var colorPallete: ImageView
     private lateinit var colors: IntArray
     private lateinit var notes: Notes
+    private lateinit var setRemainder: ExtendedFloatingActionButton
 
     private var selectedColor: Int = ColorSheet.NO_COLOR
 
@@ -46,10 +51,18 @@ class EditNotesFragment : Fragment(R.layout.fragment_edit_notes) {
         save = view.findViewById(R.id.save)
         colors = resources.getIntArray(R.array.colors)
         colorPallete = view.findViewById(R.id.colorPallete)
+        setRemainder = view.findViewById(R.id.setRemainder)
         notes = arguments?.get(NOTES) as Notes
         notesTitle.setText(notes.notesTitle)
         notesDescription.setText(notes.description)
         selectedColor = notes.backgroundColor
+        notes.alaram_time?.let {
+            val date = notes.alaram_time
+            val format = SimpleDateFormat(DATE_TIME_COMPONENT_FORMAT)
+            setRemainder.text = format.format(date)
+            setRemainder.paintFlags= setRemainder.paintFlags or Paint.STRIKE_THRU_TEXT_FLAG
+        }
+
         parent.setBackgroundColor(selectedColor)
         toolbar.setBackgroundColor(selectedColor)
         save.setOnClickListener {
