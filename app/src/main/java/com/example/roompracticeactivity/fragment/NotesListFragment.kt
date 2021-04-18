@@ -2,8 +2,10 @@ package com.example.roompracticeactivity.fragment
 
 import android.os.Build
 import android.os.Bundle
+import android.util.Log
 import android.view.*
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -29,13 +31,14 @@ import kotlin.properties.Delegates
 class NotesListFragment : Fragment(), NotesItemClickListener {
 
     private lateinit var notesViewModel: NotesListViewModel
-    private var toggleSwitcher by Delegates.notNull<Boolean>()
     private lateinit var fab: FloatingActionButton
     private lateinit var toolbar: MaterialToolbar
     private lateinit var recyclerView: RecyclerView
     private lateinit var adapter: NotesListAdapter
     private var selectedOrder = Order.NEWEST_ON_TOP
     private lateinit var notesList: List<Notes>
+    private lateinit var parent: ConstraintLayout
+    private lateinit var viewStub: ViewStub
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,10 +57,10 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         notesViewModel = ViewModelProvider(this).get(NotesListViewModel::class.java)
-
+        parent = view.findViewById(R.id.parent)
         recyclerView = view.findViewById(R.id.recyclerview)
         adapter = NotesListAdapter(context)
-
+        viewStub = view.findViewById(R.id.viewStub)
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
@@ -88,14 +91,15 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
         val setItemTouchHelper = ItemTouchHelper(itemTouchHelper)
         setItemTouchHelper.attachToRecyclerView(recyclerView)
 
-
-        toggleSwitcher = false
-
-
         with(notesViewModel) {
             allNotes.observe(viewLifecycleOwner, Observer { words ->
-                notesList = words
-                words?.let { adapter.setNotes(it) }
+                if (words.isEmpty()) {
+                    viewStub.visibility = View.VISIBLE
+                } else {
+                    viewStub.visibility = View.GONE
+                    notesList = words
+                    words?.let { adapter.setNotes(it) }
+                }
             })
             reversedLiveData.observe(viewLifecycleOwner, Observer {
                 adapter.setNotes(it)
@@ -109,7 +113,6 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
                     recyclerView.layoutManager =
                         LinearLayoutManager(requireContext())
                 }
-
             })
         }
 
@@ -147,19 +150,8 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        super.onCreateOptionsMenu(menu, inflater)
         inflater.inflate(R.menu.order_change_menu, menu)
-        when (selectedOrder) {
-            Order.OLDEST_ON_TOP -> {
-                menu.findItem(R.id.oldest_on_top).isChecked = true
-            }
-            Order.NEWEST_ON_TOP -> {
-                menu.findItem(R.id.newest_on_top).isChecked = true
-            }
-            Order.NONE -> {
-
-            }
-        }
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
 

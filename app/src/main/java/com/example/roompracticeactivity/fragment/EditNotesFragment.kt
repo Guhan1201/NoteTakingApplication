@@ -14,6 +14,7 @@ import android.widget.TimePicker
 import androidx.annotation.ColorRes
 import androidx.annotation.RequiresApi
 import androidx.constraintlayout.widget.ConstraintLayout
+import androidx.core.app.ShareCompat
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -48,7 +49,7 @@ class EditNotesFragment : Fragment(R.layout.fragment_edit_notes),
     private lateinit var parent: ConstraintLayout
     private lateinit var toolbar: MaterialToolbar
     private lateinit var notesViewModel: NotesListViewModel
-    private lateinit var colorPallete: ImageView
+    private lateinit var colorPalette: ImageView
     private lateinit var colors: IntArray
     private lateinit var notes: Notes
     private lateinit var setRemainder: ExtendedFloatingActionButton
@@ -70,7 +71,7 @@ class EditNotesFragment : Fragment(R.layout.fragment_edit_notes),
         parent = view.findViewById(R.id.parent)
         save = view.findViewById(R.id.save)
         colors = resources.getIntArray(R.array.colors)
-        colorPallete = view.findViewById(R.id.colorPallete)
+        colorPalette = view.findViewById(R.id.colorPallete)
         setRemainder = view.findViewById(R.id.setRemainder)
         notes = arguments?.get(NOTES) as Notes
         notesTitle.setText(notes.notesTitle)
@@ -109,7 +110,7 @@ class EditNotesFragment : Fragment(R.layout.fragment_edit_notes),
             datePicker.show(requireActivity().supportFragmentManager, datePicker.tag)
         }
 
-        colorPallete.setOnClickListener {
+        colorPalette.setOnClickListener {
             ColorSheet().cornerRadius(8)
                 .colorPicker(
                     colors = colors,
@@ -131,6 +132,18 @@ class EditNotesFragment : Fragment(R.layout.fragment_edit_notes),
                 R.id.delete -> {
                     notesViewModel.deleteNotes(notes = notes)
                     backPressed()
+                    true
+                }
+                R.id.share -> {
+                    val shareMsg = notesTitle.text.toString()
+                    val intent = ShareCompat.IntentBuilder.from(requireActivity())
+                        .setType("text/plain")
+                        .setText(shareMsg)
+                        .intent
+
+                    if (intent.resolveActivity(requireActivity().packageManager) != null) {
+                        startActivity(intent)
+                    }
                     true
                 }
                 else -> {

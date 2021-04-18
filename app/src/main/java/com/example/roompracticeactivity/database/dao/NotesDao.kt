@@ -7,7 +7,7 @@ import com.example.roompracticeactivity.database.entities.Notes
 @Dao
 interface NotesDao {
 
-    @Query("SELECT * FROM notes_table ORDER BY last_modified_time DESC")
+    @Query("SELECT * FROM notes_table ORDER BY created_time ")
     fun getAllNotes(): LiveData<List<Notes>>
 
     @Insert(onConflict = OnConflictStrategy.IGNORE)
@@ -23,7 +23,7 @@ interface NotesDao {
     suspend fun update(notes: Notes)
 
     @Query("SELECT * FROM notes_table WHERE notes_uid = :notesid")
-    suspend fun getNotes(notesid: String) : Notes
+    suspend fun getNotes(notesid: String): Notes
 
 
 }

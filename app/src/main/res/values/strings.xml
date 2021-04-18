@@ -19,5 +19,8 @@
     <string name="undo">UNDO</string>
     <string name="orderchange">orderChange</string>
     <string name="delete">delete</string>
+    <string name="share">share</string>
     <string name="set_remainder">Set Remainder</string>
+    <string name="text_no_notes">No Notes Found!</string>
+    <string name="text_empty_state_description">There are no notes here. Try adding few notes</string>
 </resources>
