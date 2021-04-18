@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.*
 import androidx.annotation.RequiresApi
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -36,6 +37,8 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
     private lateinit var adapter: NotesListAdapter
     private var selectedOrder = Order.NEWEST_ON_TOP
     private lateinit var notesList: List<Notes>
+    private lateinit var parent: ConstraintLayout
+    private lateinit var viewStub: ViewStub
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -54,10 +57,10 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         notesViewModel = ViewModelProvider(this).get(NotesListViewModel::class.java)
-
+        parent = view.findViewById(R.id.parent)
         recyclerView = view.findViewById(R.id.recyclerview)
         adapter = NotesListAdapter(context)
-
+        viewStub = view.findViewById(R.id.viewStub)
         recyclerView.layoutManager =
             StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
         recyclerView.adapter = adapter
@@ -90,8 +93,13 @@ class NotesListFragment : Fragment(), NotesItemClickListener {
 
         with(notesViewModel) {
             allNotes.observe(viewLifecycleOwner, Observer { words ->
-                notesList = words
-                words?.let { adapter.setNotes(it) }
+                if (words.isEmpty()) {
+                    viewStub.visibility = View.VISIBLE
+                } else {
+                    viewStub.visibility = View.GONE
+                    notesList = words
+                    words?.let { adapter.setNotes(it) }
+                }
             })
             reversedLiveData.observe(viewLifecycleOwner, Observer {
                 adapter.setNotes(it)
